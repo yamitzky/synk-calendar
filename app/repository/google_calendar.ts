@@ -1,6 +1,6 @@
 import { type calendar_v3, google } from 'googleapis'
 import { config } from '~/config'
-import type { CalendarRepository, Event } from '~/domain/calendar'
+import type { CalendarEvent, CalendarRepository } from '~/domain/calendar'
 
 let calendarClient: calendar_v3.Calendar | null = null
 
@@ -31,8 +31,9 @@ export class GoogleCalendarRepository implements CalendarRepository {
     return calendarClient
   }
 
-  async getEvents(minDate: Date, maxDate: Date): Promise<Event[]> {
+  async getEvents(minDate: Date, maxDate: Date): Promise<CalendarEvent[]> {
     const calendar = await this.getCalendarClient()
+    console.log(`Fetching events from ${minDate} to ${maxDate}`)
 
     const response = await calendar.events.list({
       calendarId: this.calendarId,
@@ -45,16 +46,16 @@ export class GoogleCalendarRepository implements CalendarRepository {
     const events = response.data.items || []
 
     return events
-      .filter((event) => event.id)
       .map((event) => ({
         id: event.id ?? '',
         start: event.start?.dateTime ?? event.start?.date ?? '',
         end: event.end?.dateTime ?? event.end?.date ?? '',
-        title: event.summary,
-        location: event.location,
+        title: event.summary ?? undefined,
+        location: event.location ?? undefined,
         people: event.attendees?.map((a) => a.displayName || a.email || a.id || 'unknown user') || [],
-        description: event.description,
+        description: event.description ?? undefined,
         calendarId: this.calendarId,
       }))
+      .filter((event) => event.id && event.start && event.end)
   }
 }
