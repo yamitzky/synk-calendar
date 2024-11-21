@@ -3,16 +3,22 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { format } from 'date-fns'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import type { CalendarEvent } from '~/domain/calendar'
 
 type Props = {
-  events: CalendarEvent[]
+  calendars: Array<{ calendarId: string; events: CalendarEvent[] }>
   onChangeDate?: (startDate: string, endDate: string) => void
   initialDate?: string
 }
 
-export const Calendar = ({ events, onChangeDate, initialDate }: Props) => {
+const colors = ['#053B48', '#62420E', '#992F7B', '#0E793C', '#6020A0', '#004493']
+
+function getColor(index: number): string {
+  return colors[index % colors.length]
+}
+
+export const Calendar = ({ calendars, onChangeDate, initialDate }: Props) => {
   const prevStartDate = useRef<string>()
   const prevEndDate = useRef<string>()
 
@@ -29,13 +35,17 @@ export const Calendar = ({ events, onChangeDate, initialDate }: Props) => {
     [onChangeDate],
   )
 
+  const eventSources = useMemo(() => {
+    return calendars.map((cal, index) => ({ events: cal.events, color: getColor(index) }))
+  }, [calendars])
+
   return (
     <FullCalendar
       initialDate={initialDate}
       height="100%"
       plugins={[dayGridPlugin, timeGridPlugin]}
       initialView="timeGridWeek"
-      events={events}
+      eventSources={eventSources}
       datesSet={handleDatesSet}
       locale="ja"
       locales={[jaLocale]}

@@ -29,30 +29,28 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const minDate = subDays(startDate, 7)
   const maxDate = addDays(endDate, 7)
 
-  try {
-    const calendars = config.CALENDAR_IDS.map((id) => new GoogleCalendarRepository(id))
-    const calendarEvents = await Promise.all(calendars.map((calendar) => calendar.getEvents(minDate, maxDate)))
-    const events = calendarEvents.flat()
-    return json({
-      events,
-      error: null,
-      startDate: startDateStr,
-      endDate: endDateStr,
-    })
-  } catch (error) {
-    console.error('Error fetching events:', error)
-    return json({ events: null, error, startDate: startDateStr, endDate: endDateStr })
-  }
+  const repositories = config.CALENDAR_IDS.map((id) => new GoogleCalendarRepository(id))
+  const calendars = await Promise.all(
+    repositories.map(async (calendar) => ({
+      calendarId: calendar.calendarId,
+      events: await calendar.getEvents(minDate, maxDate),
+    })),
+  )
+  return json({
+    calendars,
+    startDate: startDateStr,
+    endDate: endDateStr,
+  })
 }
 
 export default function Index() {
-  const { events, error, startDate } = useLoaderData<typeof loader>()
+  const { calendars, startDate } = useLoaderData<typeof loader>()
   const navigate = useNavigate()
 
   return (
     <div className="h-screen w-full p-4">
       <Calendar
-        events={events ?? []}
+        calendars={calendars}
         initialDate={startDate}
         onChangeDate={(startDate, endDate) => {
           navigate({ search: `startDate=${startDate}&endDate=${endDate}` }, { replace: true })
