@@ -4,7 +4,7 @@ import type { CalendarViewType } from '~/components/viewType'
 
 type Props = {
   title: string
-  timeText: string
+  timeText?: string
   viewType: CalendarViewType
   color: string
   start: string
