@@ -10,3 +10,12 @@ body {
     color-scheme: dark;
   }
 }
+
+a[href] {
+  @apply text-teal-500 underline hover:opacity-80 transition;
+}
+
+/* workaround for fullcalendar */
+.fc-daygrid-dot-event {
+  overflow: hidden;
+}

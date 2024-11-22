@@ -1,9 +1,12 @@
 import jaLocale from '@fullcalendar/core/locales/ja'
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import dayGridPlugin from '@fullcalendar/daygrid'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
 import { format } from 'date-fns'
 import { useCallback, useMemo, useRef } from 'react'
+import { EventCell } from '~/components/EventCell'
+import { EventDetail } from '~/components/EventDetail'
 import type { CalendarEvent } from '~/domain/calendar'
 
 type Props = {
@@ -26,11 +29,16 @@ export const Calendar = ({ calendars, onChangeDate, initialDate }: Props) => {
     ({ start, end }: { start: Date; end: Date }) => {
       const newStartDate = format(start, 'yyyy-MM-dd')
       const newEndDate = format(end, 'yyyy-MM-dd')
-      if (newStartDate !== prevStartDate.current && newEndDate !== prevEndDate.current) {
-        prevStartDate.current = newStartDate
-        prevEndDate.current = newEndDate
+      if (
+        prevStartDate.current &&
+        prevEndDate.current &&
+        newStartDate !== prevStartDate.current &&
+        newEndDate !== prevEndDate.current
+      ) {
         onChangeDate?.(newStartDate, newEndDate)
       }
+      prevStartDate.current = newStartDate
+      prevEndDate.current = newEndDate
     },
     [onChangeDate],
   )
@@ -62,6 +70,37 @@ export const Calendar = ({ calendars, onChangeDate, initialDate }: Props) => {
         center: 'title',
         start: 'today prev,next',
         end: 'dayGridMonth,timeGridWeek,timeGridFourDay,timeGridDay',
+      }}
+      eventContent={(eventInfo) => {
+        return (
+          <Popover placement="right-start">
+            <PopoverTrigger>
+              <div className="h-full cursor-pointer">
+                <EventCell
+                  title={eventInfo.event.title}
+                  timeText={eventInfo.timeText}
+                  gridType={eventInfo.view.type.startsWith('day') ? 'day' : 'time'}
+                  color={eventInfo.backgroundColor}
+                  start={eventInfo.event.startStr}
+                  end={eventInfo.event.endStr}
+                />
+              </div>
+            </PopoverTrigger>
+            <PopoverContent>
+              <div className="p-4 max-w-2xl max-h-[60vh] overflow-y-auto">
+                <EventDetail
+                  title={eventInfo.event.title}
+                  start={eventInfo.event.startStr}
+                  end={eventInfo.event.endStr}
+                  location={eventInfo.event.extendedProps.location}
+                  people={eventInfo.event.extendedProps.people}
+                  description={eventInfo.event.extendedProps.description}
+                  conference={eventInfo.event.extendedProps.conference}
+                />
+              </div>
+            </PopoverContent>
+          </Popover>
+        )
       }}
     />
   )
