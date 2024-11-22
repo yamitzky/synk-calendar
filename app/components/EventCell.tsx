@@ -1,19 +1,22 @@
 import { isSameDay } from 'date-fns'
+import { twMerge } from 'tailwind-merge'
+import type { CalendarViewType } from '~/components/viewType'
 
 type Props = {
   title: string
   timeText: string
-  gridType: 'time' | 'day'
+  viewType: CalendarViewType
   color: string
   start: string
   end: string
+  className?: string
 }
 
-export const EventCell = ({ title, timeText, gridType, color, start, end }: Props) => {
-  const isDayGridMonth = gridType === 'day'
+export const EventCell = ({ title, timeText, viewType, color, start, end, className }: Props) => {
+  const isDayGridMonth = viewType === 'dayGridMonth'
   const displaysDot = isDayGridMonth && isSameDay(start, end)
   return (
-    <div className="h-full p-0.5 overflow-hidden">
+    <div className={twMerge('h-full p-0.5 overflow-hidden', className)}>
       {isDayGridMonth ? (
         <div className="flex items-center space-x-1">
           {displaysDot && <div style={{ backgroundColor: color }} className="w-2.5 h-2.5 rounded-full" />}

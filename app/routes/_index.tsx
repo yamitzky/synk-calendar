@@ -21,6 +21,9 @@ function getDateRange(searchParams: URLSearchParams) {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
+
+  const isMobile = request.headers.get('user-agent')?.includes('Mobile/') ?? false
+
   const { startDate, endDate } = getDateRange(url.searchParams)
   const startDateStr = format(startDate, 'yyyy-MM-dd')
   const endDateStr = format(endDate, 'yyyy-MM-dd')
@@ -38,13 +41,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   )
   return json({
     calendars,
+    isMobile,
     startDate: startDateStr,
     endDate: endDateStr,
   })
 }
 
 export default function Index() {
-  const { calendars, startDate } = useLoaderData<typeof loader>()
+  const { calendars, startDate, isMobile } = useLoaderData<typeof loader>()
   const navigate = useNavigate()
 
   return (
@@ -52,6 +56,7 @@ export default function Index() {
       <Calendar
         calendars={calendars}
         initialDate={startDate}
+        initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
         onChangeDate={(startDate, endDate) => {
           navigate({ search: `startDate=${startDate}&endDate=${endDate}` }, { replace: true })
         }}

@@ -1,11 +1,14 @@
 import parse from 'html-react-parser'
+import { twMerge } from 'tailwind-merge'
 import type { CalendarEvent } from '~/domain/calendar'
 
-type Props = Pick<CalendarEvent, 'title' | 'start' | 'end' | 'description' | 'location' | 'people' | 'conference'>
+type Props = {
+  className?: string
+} & Pick<CalendarEvent, 'title' | 'start' | 'end' | 'description' | 'location' | 'people' | 'conference'>
 
-export const EventDetail = ({ title, start, end, description, location, people, conference }: Props) => {
+export const EventDetail = ({ title, start, end, description, location, people, conference, className }: Props) => {
   return (
-    <div className="space-y-2">
+    <div className={twMerge('space-y-2', className)}>
       <p className="font-bold text-lg">{title}</p>
       <p>{formatRange(start, end)}</p>
       {conference && (
