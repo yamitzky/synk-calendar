@@ -3,6 +3,7 @@ import { EventCell } from './EventCell'
 
 const meta = {
   component: EventCell,
+  tags: ['autodocs'],
 } satisfies Meta<typeof EventCell>
 
 export default meta
