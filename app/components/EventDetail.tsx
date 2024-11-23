@@ -46,10 +46,7 @@ const Location = ({ location }: { location: string }) => {
   return <p className="overflow-ellipsis whitespace-nowrap overflow-x-hidden">{innerContent}</p>
 }
 
-function formatRange(start: string, end: string): string {
-  const startDate = new Date(start)
-  const endDate = new Date(end)
-
+function formatRange(start: string | null, end: string | null): string {
   const format = new Intl.DateTimeFormat('ja', {
     year: 'numeric',
     month: 'long',
@@ -58,5 +55,15 @@ function formatRange(start: string, end: string): string {
     hour: 'numeric',
     minute: 'numeric',
   })
-  return format.formatRange(startDate, endDate)
+
+  if (start && end) {
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+    return format.formatRange(startDate, endDate)
+  }
+  if (start) {
+    const startDate = new Date(start)
+    return format.format(startDate)
+  }
+  return ''
 }

@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>
 
 export const TimeEvent: Story = {
   args: {
-    title: 'Meeting',
+    title: 'Team Meeting',
     timeText: '10:00 - 11:00',
     viewType: 'timeGridDay',
     color: '#1ea7fd',
@@ -22,7 +22,7 @@ export const TimeEvent: Story = {
 
 export const DayEvent: Story = {
   args: {
-    title: 'Meeting',
+    title: 'All-Day Conference',
     viewType: 'timeGridDay',
     color: '#1ea7fd',
     start: '2023-01-01',
@@ -32,7 +32,7 @@ export const DayEvent: Story = {
 
 export const DayGridMonthSameDay: Story = {
   args: {
-    title: 'Meeting',
+    title: 'Workshop',
     timeText: '10:00 - 11:00',
     viewType: 'dayGridMonth',
     color: '#1ea7fd',
@@ -43,7 +43,7 @@ export const DayGridMonthSameDay: Story = {
 
 export const DayGridMonthDifferentDay: Story = {
   args: {
-    title: 'Meeting',
+    title: 'Multi-Day Event',
     timeText: '10:00 - 11:00',
     viewType: 'dayGridMonth',
     color: '#1ea7fd',

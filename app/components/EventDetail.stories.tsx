@@ -11,57 +11,57 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    title: 'チームミーティング',
+    title: 'Team Meeting',
     start: '2023-06-15T10:00:00',
     end: '2023-06-15T11:00:00',
-    description: 'プロジェクトの進捗について議論します。',
-    location: '会議室A',
+    description: 'Discussing project progress.',
+    location: 'Meeting Room A',
     people: [
-      { displayName: '山田太郎', email: 'taro.yamada@example.com', organizer: true },
-      { displayName: '鈴木花子', email: 'hanako.suzuki@example.com', organizer: false },
+      { displayName: 'John Smith', email: 'john.smith@example.com', organizer: true },
+      { displayName: 'Jane Doe', email: 'jane.doe@example.com', organizer: false },
     ],
   },
 }
 
 export const WithConference: Story = {
   args: {
-    title: 'オンラインミーティング',
+    title: 'Online Meeting',
     start: '2023-06-16T14:00:00',
     end: '2023-06-16T15:00:00',
-    description: 'Zoomを使用してオンラインで会議を行います。',
+    description: 'Online meeting using Zoom.',
     conference: {
       name: 'Zoom Meeting',
       url: 'https://zoom.us/j/1234567890',
     },
     people: [
-      { displayName: '佐藤一郎', email: 'ichiro.sato@example.com', organizer: true },
-      { displayName: '田中美咲', email: 'misaki.tanaka@example.com', organizer: false },
+      { displayName: 'Alice Johnson', email: 'alice.johnson@example.com', organizer: true },
+      { displayName: 'Bob Williams', email: 'bob.williams@example.com', organizer: false },
     ],
   },
 }
 
 export const LongEvent: Story = {
   args: {
-    title: '年次カンファレンス',
+    title: 'Annual Conference',
     start: '2023-07-01T09:00:00',
     end: '2023-07-03T17:00:00',
-    description: '3日間にわたる会社の年次カンファレンスです。様々なセッションと networking の機会があります。',
-    location: '東京コンベンションセンター',
+    description: 'Three-day company annual conference with various sessions and networking opportunities.',
+    location: 'New York Convention Center',
     people: [
-      { displayName: '高橋誠', email: 'makoto.takahashi@example.com', organizer: false },
-      { displayName: '渡辺愛', email: 'ai.watanabe@example.com', organizer: false },
-      { displayName: '木村健太', email: 'kenta.kimura@example.com', organizer: false },
+      { displayName: 'Charlie Brown', email: 'charlie.brown@example.com', organizer: false },
+      { displayName: 'Diana Clark', email: 'diana.clark@example.com', organizer: false },
+      { displayName: 'Edward Davis', email: 'edward.davis@example.com', organizer: false },
     ],
   },
 }
 
 export const WithOnlineLocation: Story = {
   args: {
-    title: 'ウェビナー',
+    title: 'Webinar',
     start: '2023-06-20T13:00:00',
     end: '2023-06-20T14:30:00',
-    description: '新製品についてのオンラインウェビナーです。',
+    description: 'Online webinar about our new product.',
     location: 'https://webinar.example.com/product-launch',
-    people: [{ displayName: '中村優子', email: 'yuko.nakamura@example.com', organizer: false }],
+    people: [{ displayName: 'Fiona Evans', email: 'fiona.evans@example.com', organizer: false }],
   },
 }
