@@ -1,0 +1,326 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CalendarHeader > renders correctly 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="grid gap-2 grid-cols-[repeat(2,max-content)] sm:grid-cols-[repeat(3,max-content)] justify-between items-center"
+      >
+        <div
+          class="inline-flex items-center justify-center h-auto"
+          role="group"
+        >
+          <button
+            aria-label="Today"
+            class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 h-10 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium data-[hover=true]:opacity-hover px-4"
+            type="button"
+          >
+            Today
+          </button>
+          <button
+            aria-label="Previous"
+            class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+            type="button"
+          >
+            ◀
+          </button>
+          <button
+            aria-label="Next"
+            class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+            type="button"
+          >
+            ▶
+          </button>
+        </div>
+        <h1
+          class="text-lg text-center col-span-2 sm:col-span-1"
+        >
+          2024年11月23日
+        </h1>
+        <div
+          class="w-40 row-start-1 col-start-2 sm:col-start-3"
+        >
+          <div
+            class="group flex flex-col w-full transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)]"
+            data-slot="base"
+          >
+            <div
+              aria-hidden="true"
+              data-a11y-ignore="aria-hidden-focus"
+              data-testid="hidden-select-container"
+              style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+            >
+              <input
+                style="font-size: 16px;"
+                tabindex="-1"
+                type="text"
+                value=""
+              />
+              <label>
+                <select
+                  size="4"
+                  tabindex="-1"
+                  title=""
+                >
+                  <option />
+                  <option
+                    value="dayGridMonth"
+                  >
+                    月
+                  </option>
+                  <option
+                    value="timeGridWeek"
+                  >
+                    週
+                  </option>
+                  <option
+                    value="timeGridFourDay"
+                  >
+                    4日
+                  </option>
+                  <option
+                    value="timeGridDay"
+                  >
+                    日
+                  </option>
+                </select>
+              </label>
+            </div>
+            <div
+              class="w-full flex flex-col"
+              data-slot="mainWrapper"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-label="view type"
+                aria-labelledby="react-aria-:r7: react-aria-:r2:"
+                class="relative px-3 gap-3 w-full inline-flex flex-row items-center shadow-sm tap-highlight-transparent group-data-[focus=true]:bg-default-100 h-10 min-h-10 rounded-medium bg-default-100 data-[hover=true]:bg-default-50 outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2"
+                data-slot="trigger"
+                id="react-aria-:r2:"
+                type="button"
+              >
+                <div
+                  class="inline-flex h-full w-[calc(100%_-_theme(spacing.6))] min-h-4 items-center gap-1.5 box-border"
+                  data-slot="innerWrapper"
+                >
+                  <span
+                    class="text-foreground-500 font-normal w-full text-left rtl:text-right text-small truncate group-data-[has-value=true]:text-default-foreground"
+                    data-slot="value"
+                    id="react-aria-:r7:"
+                  />
+                </div>
+                <svg
+                  aria-hidden="true"
+                  class="absolute end-3 w-4 h-4 transition-transform duration-150 ease motion-reduce:transition-none data-[open=true]:rotate-180"
+                  data-slot="selectorIcon"
+                  fill="none"
+                  focusable="false"
+                  height="1em"
+                  role="presentation"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                >
+                  <path
+                    d="m6 9 6 6 6-6"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="grid gap-2 grid-cols-[repeat(2,max-content)] sm:grid-cols-[repeat(3,max-content)] justify-between items-center"
+    >
+      <div
+        class="inline-flex items-center justify-center h-auto"
+        role="group"
+      >
+        <button
+          aria-label="Today"
+          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 h-10 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium data-[hover=true]:opacity-hover px-4"
+          type="button"
+        >
+          Today
+        </button>
+        <button
+          aria-label="Previous"
+          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+          type="button"
+        >
+          ◀
+        </button>
+        <button
+          aria-label="Next"
+          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+          type="button"
+        >
+          ▶
+        </button>
+      </div>
+      <h1
+        class="text-lg text-center col-span-2 sm:col-span-1"
+      >
+        2024年11月23日
+      </h1>
+      <div
+        class="w-40 row-start-1 col-start-2 sm:col-start-3"
+      >
+        <div
+          class="group flex flex-col w-full transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)]"
+          data-slot="base"
+        >
+          <div
+            aria-hidden="true"
+            data-a11y-ignore="aria-hidden-focus"
+            data-testid="hidden-select-container"
+            style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+          >
+            <input
+              style="font-size: 16px;"
+              tabindex="-1"
+              type="text"
+              value=""
+            />
+            <label>
+              <select
+                size="4"
+                tabindex="-1"
+                title=""
+              >
+                <option />
+                <option
+                  value="dayGridMonth"
+                >
+                  月
+                </option>
+                <option
+                  value="timeGridWeek"
+                >
+                  週
+                </option>
+                <option
+                  value="timeGridFourDay"
+                >
+                  4日
+                </option>
+                <option
+                  value="timeGridDay"
+                >
+                  日
+                </option>
+              </select>
+            </label>
+          </div>
+          <div
+            class="w-full flex flex-col"
+            data-slot="mainWrapper"
+          >
+            <button
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="view type"
+              aria-labelledby="react-aria-:r7: react-aria-:r2:"
+              class="relative px-3 gap-3 w-full inline-flex flex-row items-center shadow-sm tap-highlight-transparent group-data-[focus=true]:bg-default-100 h-10 min-h-10 rounded-medium bg-default-100 data-[hover=true]:bg-default-50 outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2"
+              data-slot="trigger"
+              id="react-aria-:r2:"
+              type="button"
+            >
+              <div
+                class="inline-flex h-full w-[calc(100%_-_theme(spacing.6))] min-h-4 items-center gap-1.5 box-border"
+                data-slot="innerWrapper"
+              >
+                <span
+                  class="text-foreground-500 font-normal w-full text-left rtl:text-right text-small truncate group-data-[has-value=true]:text-default-foreground"
+                  data-slot="value"
+                  id="react-aria-:r7:"
+                />
+              </div>
+              <svg
+                aria-hidden="true"
+                class="absolute end-3 w-4 h-4 transition-transform duration-150 ease motion-reduce:transition-none data-[open=true]:rotate-180"
+                data-slot="selectorIcon"
+                fill="none"
+                focusable="false"
+                height="1em"
+                role="presentation"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+                width="1em"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

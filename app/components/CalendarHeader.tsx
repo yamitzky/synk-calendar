@@ -34,13 +34,13 @@ export const CalendarHeader = ({
       )}
     >
       <ButtonGroup>
-        <Button onClick={onToday} className="px-4">
+        <Button onClick={onToday} className="px-4" aria-label="Today">
           {todayLabel ?? getToday()}
         </Button>
-        <Button isIconOnly onClick={onPrev}>
+        <Button isIconOnly onClick={onPrev} aria-label="Previous">
           ◀
         </Button>
-        <Button isIconOnly onClick={onNext}>
+        <Button isIconOnly onClick={onNext} aria-label="Next">
           ▶
         </Button>
       </ButtonGroup>
@@ -52,10 +52,18 @@ export const CalendarHeader = ({
           aria-label="view type"
           onChange={(e) => onChangeView?.(e.target.value as CalendarViewType)}
         >
-          <SelectItem key="dayGridMonth">月</SelectItem>
-          <SelectItem key="timeGridWeek">週</SelectItem>
-          <SelectItem key="timeGridFourDay">4日</SelectItem>
-          <SelectItem key="timeGridDay">日</SelectItem>
+          <SelectItem key="dayGridMonth" data-testid="dayGridMonth">
+            月
+          </SelectItem>
+          <SelectItem key="timeGridWeek" data-testid="timeGridWeek">
+            週
+          </SelectItem>
+          <SelectItem key="timeGridFourDay" data-testid="timeGridFourDay">
+            4日
+          </SelectItem>
+          <SelectItem key="timeGridDay" data-testid="timeGridDay">
+            日
+          </SelectItem>
         </Select>
       </div>
     </div>
