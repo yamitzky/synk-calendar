@@ -17,7 +17,7 @@ exports[`Calendar > renders correctly with dayGridMonth view 1`] = `
           class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 h-10 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium data-[hover=true]:opacity-hover px-4"
           type="button"
         >
-          5月1日
+          May 1
         </button>
         <button
           aria-label="Previous"
@@ -37,7 +37,7 @@ exports[`Calendar > renders correctly with dayGridMonth view 1`] = `
       <h1
         class="text-lg text-center col-span-2 sm:col-span-1"
       >
-        2023/05/01～2023/06/11
+        May 1 – June 11, 2023
       </h1>
       <div
         class="w-40 row-start-1 col-start-2 sm:col-start-3"
@@ -70,22 +70,22 @@ exports[`Calendar > renders correctly with dayGridMonth view 1`] = `
                 <option
                   value="dayGridMonth"
                 >
-                  月
+                  Month
                 </option>
                 <option
                   value="timeGridWeek"
                 >
-                  週
+                  Week
                 </option>
                 <option
                   value="timeGridFourDay"
                 >
-                  4日
+                  4 Days
                 </option>
                 <option
                   value="timeGridDay"
                 >
-                  日
+                  Day
                 </option>
               </select>
             </label>
@@ -113,7 +113,7 @@ exports[`Calendar > renders correctly with dayGridMonth view 1`] = `
                   data-slot="value"
                   id="react-aria-:rg:"
                 >
-                  月
+                  Month
                 </span>
               </div>
               <svg
@@ -1847,7 +1847,7 @@ exports[`Calendar > renders correctly with timeGridDay view 1`] = `
           class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 h-10 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium data-[hover=true]:opacity-hover px-4"
           type="button"
         >
-          5月1日
+          May 1
         </button>
         <button
           aria-label="Previous"
@@ -1867,7 +1867,7 @@ exports[`Calendar > renders correctly with timeGridDay view 1`] = `
       <h1
         class="text-lg text-center col-span-2 sm:col-span-1"
       >
-        2023年5月1日
+        May 1, 2023
       </h1>
       <div
         class="w-40 row-start-1 col-start-2 sm:col-start-3"
@@ -1900,22 +1900,22 @@ exports[`Calendar > renders correctly with timeGridDay view 1`] = `
                 <option
                   value="dayGridMonth"
                 >
-                  月
+                  Month
                 </option>
                 <option
                   value="timeGridWeek"
                 >
-                  週
+                  Week
                 </option>
                 <option
                   value="timeGridFourDay"
                 >
-                  4日
+                  4 Days
                 </option>
                 <option
                   value="timeGridDay"
                 >
-                  日
+                  Day
                 </option>
               </select>
             </label>
@@ -1943,7 +1943,7 @@ exports[`Calendar > renders correctly with timeGridDay view 1`] = `
                   data-slot="value"
                   id="react-aria-:r7:"
                 >
-                  日
+                  Day
                 </span>
               </div>
               <svg
@@ -3019,7 +3019,7 @@ exports[`Calendar > renders correctly with timeGridFourDay view 1`] = `
           class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 h-10 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium data-[hover=true]:opacity-hover px-4"
           type="button"
         >
-          5月1日
+          May 1
         </button>
         <button
           aria-label="Previous"
@@ -3039,7 +3039,7 @@ exports[`Calendar > renders correctly with timeGridFourDay view 1`] = `
       <h1
         class="text-lg text-center col-span-2 sm:col-span-1"
       >
-        2023/05/01～2023/05/04
+        May 1 – 4, 2023
       </h1>
       <div
         class="w-40 row-start-1 col-start-2 sm:col-start-3"
@@ -3072,22 +3072,22 @@ exports[`Calendar > renders correctly with timeGridFourDay view 1`] = `
                 <option
                   value="dayGridMonth"
                 >
-                  月
+                  Month
                 </option>
                 <option
                   value="timeGridWeek"
                 >
-                  週
+                  Week
                 </option>
                 <option
                   value="timeGridFourDay"
                 >
-                  4日
+                  4 Days
                 </option>
                 <option
                   value="timeGridDay"
                 >
-                  日
+                  Day
                 </option>
               </select>
             </label>
@@ -3115,7 +3115,7 @@ exports[`Calendar > renders correctly with timeGridFourDay view 1`] = `
                   data-slot="value"
                   id="react-aria-:rq:"
                 >
-                  4日
+                  4 Days
                 </span>
               </div>
               <svg
@@ -4406,7 +4406,7 @@ exports[`Calendar > renders correctly with timeGridWeek view 1`] = `
           class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 h-10 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium data-[hover=true]:opacity-hover px-4"
           type="button"
         >
-          5月1日
+          May 1
         </button>
         <button
           aria-label="Previous"
@@ -4426,7 +4426,7 @@ exports[`Calendar > renders correctly with timeGridWeek view 1`] = `
       <h1
         class="text-lg text-center col-span-2 sm:col-span-1"
       >
-        2023/05/01～2023/05/07
+        May 1 – 7, 2023
       </h1>
       <div
         class="w-40 row-start-1 col-start-2 sm:col-start-3"
@@ -4459,22 +4459,22 @@ exports[`Calendar > renders correctly with timeGridWeek view 1`] = `
                 <option
                   value="dayGridMonth"
                 >
-                  月
+                  Month
                 </option>
                 <option
                   value="timeGridWeek"
                 >
-                  週
+                  Week
                 </option>
                 <option
                   value="timeGridFourDay"
                 >
-                  4日
+                  4 Days
                 </option>
                 <option
                   value="timeGridDay"
                 >
-                  日
+                  Day
                 </option>
               </select>
             </label>
@@ -4502,7 +4502,7 @@ exports[`Calendar > renders correctly with timeGridWeek view 1`] = `
                   data-slot="value"
                   id="react-aria-:r14:"
                 >
-                  週
+                  Week
                 </span>
               </div>
               <svg
@@ -5970,7 +5970,7 @@ exports[`Calendar > uses initialDate when provided 1`] = `
           class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 min-w-20 h-10 text-small gap-2 [&:not(:first-child):not(:last-child)]:rounded-none [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground rounded-none first:rounded-s-medium last:rounded-e-medium data-[hover=true]:opacity-hover px-4"
           type="button"
         >
-          5月1日
+          May 1
         </button>
         <button
           aria-label="Previous"
@@ -5990,7 +5990,7 @@ exports[`Calendar > uses initialDate when provided 1`] = `
       <h1
         class="text-lg text-center col-span-2 sm:col-span-1"
       >
-        2022年1月1日
+        January 1, 2022
       </h1>
       <div
         class="w-40 row-start-1 col-start-2 sm:col-start-3"
@@ -6023,22 +6023,22 @@ exports[`Calendar > uses initialDate when provided 1`] = `
                 <option
                   value="dayGridMonth"
                 >
-                  月
+                  Month
                 </option>
                 <option
                   value="timeGridWeek"
                 >
-                  週
+                  Week
                 </option>
                 <option
                   value="timeGridFourDay"
                 >
-                  4日
+                  4 Days
                 </option>
                 <option
                   value="timeGridDay"
                 >
-                  日
+                  Day
                 </option>
               </select>
             </label>
@@ -6066,7 +6066,7 @@ exports[`Calendar > uses initialDate when provided 1`] = `
                   data-slot="value"
                   id="react-aria-:r1e:"
                 >
-                  日
+                  Day
                 </span>
               </div>
               <svg

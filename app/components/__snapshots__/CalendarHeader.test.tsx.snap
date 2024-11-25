@@ -34,7 +34,7 @@ exports[`CalendarHeader > renders correctly 1`] = `
     <h1
       class="text-lg text-center col-span-2 sm:col-span-1"
     >
-      2023年5月1日
+      May 1, 2023
     </h1>
     <div
       class="w-40 row-start-1 col-start-2 sm:col-start-3"
@@ -65,22 +65,22 @@ exports[`CalendarHeader > renders correctly 1`] = `
               <option
                 value="dayGridMonth"
               >
-                月
+                Month
               </option>
               <option
                 value="timeGridWeek"
               >
-                週
+                Week
               </option>
               <option
                 value="timeGridFourDay"
               >
-                4日
+                4 Days
               </option>
               <option
                 value="timeGridDay"
               >
-                日
+                Day
               </option>
             </select>
           </label>

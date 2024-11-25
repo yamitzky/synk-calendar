@@ -68,7 +68,7 @@ describe('Calendar', () => {
       <Calendar calendars={mockCalendars} initialView="timeGridDay" initialDate="2022-01-01" />,
     )
     expect(container).toMatchSnapshot()
-    expect(screen.getByText('2022年1月1日')).toBeInTheDocument()
+    expect(screen.getByText('January 1, 2022')).toBeInTheDocument()
   })
 
   it('calls onChangeDate when dates are set', () => {

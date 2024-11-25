@@ -2,6 +2,7 @@ import { Button, ButtonGroup, Select, SelectItem } from '@nextui-org/react'
 import { subDays } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
 import type { CalendarViewType } from '~/components/viewType'
+import useLocale from '~/hooks/useLocale'
 
 type Props = {
   todayLabel?: string
@@ -26,6 +27,8 @@ export const CalendarHeader = ({
   todayLabel,
   className,
 }: Props) => {
+  const locale = useLocale()
+  const langCode = locale?.split('-')?.[0]
   return (
     <div
       className={twMerge(
@@ -35,7 +38,7 @@ export const CalendarHeader = ({
     >
       <ButtonGroup>
         <Button onClick={onToday} className="px-4" aria-label="Today">
-          {todayLabel ?? getToday()}
+          {todayLabel ?? getToday(locale)}
         </Button>
         <Button isIconOnly onClick={onPrev} aria-label="Previous">
           ◀
@@ -44,7 +47,7 @@ export const CalendarHeader = ({
           ▶
         </Button>
       </ButtonGroup>
-      <h1 className="text-lg text-center col-span-2 sm:col-span-1">{formatRange(start, end)}</h1>
+      <h1 className="text-lg text-center col-span-2 sm:col-span-1">{formatRange(locale, start, end)}</h1>
       <div className="w-40 row-start-1 col-start-2 sm:col-start-3">
         <Select
           defaultSelectedKeys={initialView ? [initialView] : undefined}
@@ -53,16 +56,16 @@ export const CalendarHeader = ({
           onChange={(e) => onChangeView?.(e.target.value as CalendarViewType)}
         >
           <SelectItem key="dayGridMonth" data-testid="dayGridMonth">
-            月
+            {langCode === 'ja' ? '月' : 'Month'}
           </SelectItem>
           <SelectItem key="timeGridWeek" data-testid="timeGridWeek">
-            週
+            {langCode === 'ja' ? '週' : 'Week'}
           </SelectItem>
           <SelectItem key="timeGridFourDay" data-testid="timeGridFourDay">
-            4日
+            {langCode === 'ja' ? '4日' : '4 Days'}
           </SelectItem>
           <SelectItem key="timeGridDay" data-testid="timeGridDay">
-            日
+            {langCode === 'ja' ? '日' : 'Day'}
           </SelectItem>
         </Select>
       </div>
@@ -70,11 +73,11 @@ export const CalendarHeader = ({
   )
 }
 
-function formatRange(start?: string, end?: string): string {
+function formatRange(locale: string | undefined, start: string | undefined, end: string | undefined): string {
   const startDate = start ? new Date(start) : new Date()
   const endDate = end ? subDays(new Date(end), 1) : new Date()
 
-  const format = new Intl.DateTimeFormat('ja', {
+  const format = new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -82,8 +85,8 @@ function formatRange(start?: string, end?: string): string {
   return format.formatRange(startDate, endDate)
 }
 
-function getToday() {
-  const format = new Intl.DateTimeFormat('ja', {
+function getToday(locale: string | undefined) {
+  const format = new Intl.DateTimeFormat(locale, {
     month: 'short',
     day: 'numeric',
   })

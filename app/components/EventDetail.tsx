@@ -1,16 +1,18 @@
 import parse from 'html-react-parser'
 import { twMerge } from 'tailwind-merge'
 import type { CalendarEvent } from '~/domain/calendar'
+import useLocale from '~/hooks/useLocale'
 
 type Props = {
   className?: string
 } & Pick<CalendarEvent, 'title' | 'start' | 'end' | 'description' | 'location' | 'people' | 'conference'>
 
 export const EventDetail = ({ title, start, end, description, location, people, conference, className }: Props) => {
+  const locale = useLocale()
   return (
     <div className={twMerge('space-y-2', className)}>
       <p className="font-bold text-lg">{title}</p>
-      <p>{formatRange(start, end)}</p>
+      <p>{formatRange(locale, start, end)}</p>
       {conference && (
         <p>
           <a href={conference.url} target="_blank" rel="noreferrer" className="">
@@ -46,8 +48,8 @@ const Location = ({ location }: { location: string }) => {
   return <p className="overflow-ellipsis whitespace-nowrap overflow-x-hidden">{innerContent}</p>
 }
 
-function formatRange(start: string | null, end: string | null): string {
-  const format = new Intl.DateTimeFormat('ja', {
+function formatRange(locale: string | undefined, start: string | null, end: string | null): string {
+  const format = new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

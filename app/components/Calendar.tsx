@@ -8,6 +8,7 @@ import { format } from 'date-fns'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import type { CalendarEvent } from '~/domain/calendar'
+import useLocale from '~/hooks/useLocale'
 import { CalendarHeader } from './CalendarHeader'
 import { EventCell } from './EventCell'
 import { EventDetail } from './EventDetail'
@@ -20,14 +21,16 @@ type Props = {
   initialDate?: string
 }
 
-const colors = ['#053B48', '#62420E', '#992F7B', '#0E793C', '#6020A0', '#004493']
+const colors = ['#053B48', '#62420E', '#992F7B', '#0E793C', '#6020A0', '#004493'] as const
 
 function getColor(index: number): string {
-  return colors[index % colors.length]
+  return colors[index % colors.length] ?? colors[0]
 }
 
 export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = 'dayGridMonth' }: Props) => {
   const [dateRange, setDateRange] = useState<{ start: string; end: string }>()
+
+  const locale = useLocale()
 
   const handleDatesSet = useCallback(
     ({ start, end }: { start: Date; end: Date }) => {
@@ -80,7 +83,7 @@ export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = '
             initialView={initialView}
             eventSources={eventSources}
             datesSet={handleDatesSet}
-            locale="ja"
+            locale={locale}
             locales={[jaLocale]}
             nowIndicator
             firstDay={1}

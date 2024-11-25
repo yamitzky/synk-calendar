@@ -49,11 +49,11 @@ describe('CalendarHeader', () => {
 
   it('displays correct date range', () => {
     render(<CalendarHeader start="2023-05-01" end="2023-06-01" />)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('2023/05/01～2023/05/31')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('May 1 – 31, 2023')
   })
 
   it('displays correct date range when start and end are the same', () => {
     render(<CalendarHeader start="2023-05-01" end="2023-05-02" />)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('2023年5月1日')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('May 1, 2023')
   })
 })

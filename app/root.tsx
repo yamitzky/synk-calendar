@@ -1,7 +1,10 @@
-import type { LinksFunction } from '@remix-run/node'
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node'
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react'
 
 import { NextUIProvider } from '@nextui-org/react'
+
+import { LocaleContext } from '~/hooks/useLocale'
+import { getLocaleFromAcceptLanguage } from '~/utils/locale'
 import stylesheet from './tailwind.css?url'
 
 export const links: LinksFunction = () => [
@@ -18,9 +21,16 @@ export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: stylesheet },
 ]
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const locale = getLocaleFromAcceptLanguage(request.headers.get('Accept-Language'))
+  return { locale }
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { locale } = useLoaderData<typeof loader>()
+
   return (
-    <html lang="ja" className="dark">
+    <html lang={locale === 'ja' ? 'ja' : 'en'} className="dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,9 +39,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <NextUIProvider>
-          {children}
-          <ScrollRestoration />
-          <Scripts />
+          <LocaleContext.Provider value={locale}>
+            {children}
+            <ScrollRestoration />
+            <Scripts />
+          </LocaleContext.Provider>
         </NextUIProvider>
       </body>
     </html>

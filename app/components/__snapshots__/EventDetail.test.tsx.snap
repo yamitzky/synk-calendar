@@ -11,7 +11,7 @@ exports[`EventDetail > renders correctly with all props 1`] = `
       Test Event
     </p>
     <p>
-      2023/5/1(月) 10時00分～11時00分
+      Mon, May 1, 2023, 10:00 – 11:00 AM
     </p>
     <p>
       <a
@@ -54,7 +54,7 @@ exports[`EventDetail > renders correctly with minimal props 1`] = `
       Minimal Event
     </p>
     <p>
-      2023/5/1(月) 10時00分～11時00分
+      Mon, May 1, 2023, 10:00 – 11:00 AM
     </p>
   </div>
 </div>
@@ -71,7 +71,7 @@ exports[`EventDetail > renders location as a link when it is a URL 1`] = `
       URL Event
     </p>
     <p>
-      2023/5/1(月) 10時00分～11時00分
+      Mon, May 1, 2023, 10:00 – 11:00 AM
     </p>
     <p
       class="overflow-ellipsis whitespace-nowrap overflow-x-hidden"
