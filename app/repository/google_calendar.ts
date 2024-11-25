@@ -32,6 +32,8 @@ export class GoogleCalendarRepository implements CalendarRepository {
   }
 
   async getEvents(minDate: Date, maxDate: Date): Promise<CalendarEvent[]> {
+    console.debug(`Fetching events from Google Calendar: ${this.calendarId} from ${minDate} to ${maxDate}`)
+
     const calendar = await this.getCalendarClient()
 
     const response = await calendar.events.list({
