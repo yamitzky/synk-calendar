@@ -7,11 +7,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
 import { format } from 'date-fns'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { CalendarHeader } from '~/components/CalendarHeader'
-import { EventCell } from '~/components/EventCell'
-import { EventDetail } from '~/components/EventDetail'
-import type { CalendarViewType } from '~/components/viewType'
 import type { CalendarEvent } from '~/domain/calendar'
+import { CalendarHeader } from './CalendarHeader'
+import { EventCell } from './EventCell'
+import { EventDetail } from './EventDetail'
+import type { CalendarViewType } from './viewType'
 
 type Props = {
   calendars: Array<{ calendarId: string; events: CalendarEvent[] }>
@@ -26,7 +26,7 @@ function getColor(index: number): string {
   return colors[index % colors.length]
 }
 
-export const Calendar = ({ calendars, onChangeDate, initialDate, initialView }: Props) => {
+export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = 'dayGridMonth' }: Props) => {
   const [dateRange, setDateRange] = useState<{ start: string; end: string }>()
 
   const handleDatesSet = useCallback(

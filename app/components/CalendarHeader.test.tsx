@@ -3,9 +3,17 @@ import { describe, expect, it, vi } from 'vitest'
 import { CalendarHeader } from './CalendarHeader'
 
 describe('CalendarHeader', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('renders correctly', () => {
-    const result = render(<CalendarHeader todayLabel="Today" />)
-    expect(result).toMatchSnapshot()
+    vi.setSystemTime(new Date('2023-05-01'))
+    const { container } = render(<CalendarHeader todayLabel="Today" />)
+    expect(container).toMatchSnapshot()
   })
 
   it('calls onToday when today button is clicked', () => {

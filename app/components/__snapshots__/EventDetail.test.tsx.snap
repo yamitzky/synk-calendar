@@ -1,0 +1,89 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`EventDetail > renders correctly with all props 1`] = `
+<div>
+  <div
+    class="space-y-2"
+  >
+    <p
+      class="font-bold text-lg"
+    >
+      Test Event
+    </p>
+    <p>
+      2023/5/1(月) 10時00分～11時00分
+    </p>
+    <p>
+      <a
+        class=""
+        href="https://zoom.us/j/123456789"
+        rel="noreferrer"
+        target="_blank"
+      >
+        Zoom Meeting
+      </a>
+    </p>
+    <p
+      class="overflow-ellipsis whitespace-nowrap overflow-x-hidden"
+    >
+      Test Location
+    </p>
+    <div>
+      <p>
+        John Doe
+         &lt;
+        john@example.com
+        &gt;
+      </p>
+    </div>
+    <p>
+      This is a test event
+    </p>
+  </div>
+</div>
+`;
+
+exports[`EventDetail > renders correctly with minimal props 1`] = `
+<div>
+  <div
+    class="space-y-2"
+  >
+    <p
+      class="font-bold text-lg"
+    >
+      Minimal Event
+    </p>
+    <p>
+      2023/5/1(月) 10時00分～11時00分
+    </p>
+  </div>
+</div>
+`;
+
+exports[`EventDetail > renders location as a link when it is a URL 1`] = `
+<div>
+  <div
+    class="space-y-2"
+  >
+    <p
+      class="font-bold text-lg"
+    >
+      URL Event
+    </p>
+    <p>
+      2023/5/1(月) 10時00分～11時00分
+    </p>
+    <p
+      class="overflow-ellipsis whitespace-nowrap overflow-x-hidden"
+    >
+      <a
+        href="https://example.com"
+        rel="noreferrer"
+        target="_blank"
+      >
+        example.com
+      </a>
+    </p>
+  </div>
+</div>
+`;
