@@ -1,5 +1,5 @@
 import type { EventContentArg } from '@fullcalendar/core'
-import jaLocale from '@fullcalendar/core/locales/ja'
+import allLocales from '@fullcalendar/core/locales-all'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -84,7 +84,7 @@ export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = '
             eventSources={eventSources}
             datesSet={handleDatesSet}
             locale={locale}
-            locales={[jaLocale]}
+            locales={allLocales}
             nowIndicator
             firstDay={1}
             views={{
