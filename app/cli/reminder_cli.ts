@@ -6,6 +6,17 @@ import { WebhookNotificationRepository } from '~/repository/webhook_notification
 import { processReminders } from '~/usecase/process_reminders'
 
 async function main() {
+  /**
+   * Usage:
+   * pnpm reminder <base-time>
+   *
+   * Example:
+   * pnpm reminder 2023-06-01T10:00:00Z
+   *
+   * This is a sample implementation of the reminder functionality.
+   * To use the feature, you need to periodically call this CLI or deploy a serverless function
+   * that calls `processReminders` periodically.
+   */
   const args = process.argv.slice(2)
   const baseTimeArg = args[0]
   if (!baseTimeArg) {
