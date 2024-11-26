@@ -4,4 +4,5 @@ export const config = {
   REMINDER_SETTINGS: process.env.REMINDER_SETTINGS ? JSON.parse(process.env.REMINDER_SETTINGS) : [],
   REMINDER_TEMPLATE:
     process.env.REMINDER_TEMPLATE || 'Reminder: "<%= it.title %>" starts in <%= it.minutesBefore %> minutes.',
+  WEBHOOK_URL: process.env.WEBHOOK_URL,
 }

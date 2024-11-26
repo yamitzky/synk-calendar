@@ -1,40 +1,84 @@
-# Welcome to Remix!
+# Synk Calendar
 
-- 📖 [Remix docs](https://remix.run/docs)
+Synk Calendar is a web application designed to display Google Calendar contents.
 
-## Development
+It was developed with use cases in mind such as sharing shifts or personal events, where the goal is to "provide free view-only access to calendar information."
 
-Run the dev server:
+## Features
 
-```shellscript
-npm run dev
+- Integration with Google Calendar
+- Switchable views: month, week, 4-day, and day
+- Mobile/PC compatibility
+- Detailed event display
+- Reminders (Experimental)
+- Multi-language support (i18n)
+
+## Technology Stack and Libraries
+
+- TypeScript
+- React
+- Remix
+- Google Calendar API
+- FullCalendar
+
+## Setting Up the Development Environment
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yamitzky/synk-calendar.git
+cd synk-calendar
 ```
 
-## Deployment
+2. Install dependencies:
 
-First, build your app for production:
-
-```sh
-npm run build
+```bash
+pnpm install
 ```
 
-Then run the app in production mode:
+3. Set up environment variables. Create a `.env` file and configure the necessary variables:
 
-```sh
-npm start
+```
+GOOGLE_APPLICATION_CREDENTIALS=path/to/your/credentials.json
+GOOGLE_AUTH_SUBJECT=your-email@example.com
+CALENDAR_IDS=id1,id2,id3
+# The following environment variables are only required if you're using reminders
+REMINDER_SETTINGS=[{"minutesBefore":10,"notificationType":"console"},{"minutesBefore":30,"notificationType":"webhook"}]
+WEBHOOK_URL=https://your-webhook-url.com
+# Set this if you want to customize the reminder template text (Eta)
+REMINDER_TEMPLATE="Reminder: <%= it.title %> starts in <%= it.minutesBefore %> minutes."
 ```
 
-Now you'll need to pick a host to deploy it to.
+4. Start the development server:
 
-### DIY
+```bash
+pnpm dev
+```
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+The application will be available at http://localhost:5173.
 
-Make sure to deploy the output of `npm run build`
+## Building and Running in Production
 
-- `build/server`
-- `build/client`
+1. Build the application:
 
-## Styling
+```bash
+pnpm build
+```
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+2. Run the application in a production environment:
+
+```bash
+pnpm start
+```
+
+## Testing
+
+To run tests:
+
+```bash
+pnpm test
+```
+
+## License
+
+This project is released under the MIT License.

@@ -1,5 +1,6 @@
 import { parseISO } from 'date-fns'
 import { config } from '~/config'
+import type { NotificationRepository } from '~/domain/notification'
 import { ConsoleNotificationRepository } from '~/repository/console_notification'
 import { GoogleCalendarRepository } from '~/repository/google_calendar'
 import { WebhookNotificationRepository } from '~/repository/webhook_notification'
@@ -27,9 +28,11 @@ async function main() {
   const baseTime = parseISO(baseTimeArg)
 
   const calendarRepositories = config.CALENDAR_IDS.map((id) => new GoogleCalendarRepository(id))
-  const notificationRepositories = {
-    webhook: new WebhookNotificationRepository(process.env.WEBHOOK_URL || ''),
+  const notificationRepositories: Record<string, NotificationRepository> = {
     console: new ConsoleNotificationRepository(),
+  }
+  if (config.WEBHOOK_URL) {
+    notificationRepositories.webhook = new WebhookNotificationRepository(config.WEBHOOK_URL)
   }
   await processReminders(baseTime, calendarRepositories, notificationRepositories)
 }

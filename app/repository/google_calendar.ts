@@ -24,7 +24,10 @@ export class GoogleCalendarRepository implements CalendarRepository {
 
     const authClient = await auth.getClient()
     // @ts-expect-error
-    authClient.subject = config.GOOGLE_AUTH_SUBJECT
+    if (!authClient.subject) {
+      // @ts-expect-error
+      authClient.subject = config.GOOGLE_AUTH_SUBJECT
+    }
     // @ts-expect-error
     calendarClient = google.calendar({ version: 'v3', auth: authClient })
 
