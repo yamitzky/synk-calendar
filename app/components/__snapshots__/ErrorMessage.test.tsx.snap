@@ -1,0 +1,67 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ErrorMessage > renders correctly with only title 1`] = `
+<DocumentFragment>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large transition-transform-background motion-reduce:transition-none max-w-[400px] mx-auto mt-8 bg-red-50"
+    tabindex="-1"
+  >
+    <div
+      class="p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex gap-3"
+    >
+      <div
+        class="flex flex-col"
+      >
+        <p
+          class="text-lg font-bold text-danger-200"
+        >
+          Error Occurred
+        </p>
+      </div>
+    </div>
+    <hr
+      class="shrink-0 bg-divider border-none w-full h-divider"
+      role="separator"
+    />
+    <div
+      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ErrorMessage > renders correctly with title and message 1`] = `
+<DocumentFragment>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large transition-transform-background motion-reduce:transition-none max-w-[400px] mx-auto mt-8 bg-red-50"
+    tabindex="-1"
+  >
+    <div
+      class="p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex gap-3"
+    >
+      <div
+        class="flex flex-col"
+      >
+        <p
+          class="text-lg font-bold text-danger-200"
+        >
+          Error Occurred
+        </p>
+      </div>
+    </div>
+    <hr
+      class="shrink-0 bg-divider border-none w-full h-divider"
+      role="separator"
+    />
+    <div
+      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+    >
+      <p
+        class="text-danger-200"
+      >
+        Something went wrong
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
