@@ -3,7 +3,7 @@
 exports[`ErrorMessage > renders correctly with only title 1`] = `
 <DocumentFragment>
   <div
-    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large transition-transform-background motion-reduce:transition-none max-w-[400px] mx-auto mt-8 bg-red-50"
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large transition-transform-background motion-reduce:transition-none max-w-[400px] mx-auto mt-8 bg-danger-900"
     tabindex="-1"
   >
     <div
@@ -33,7 +33,7 @@ exports[`ErrorMessage > renders correctly with only title 1`] = `
 exports[`ErrorMessage > renders correctly with title and message 1`] = `
 <DocumentFragment>
   <div
-    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large transition-transform-background motion-reduce:transition-none max-w-[400px] mx-auto mt-8 bg-red-50"
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large transition-transform-background motion-reduce:transition-none max-w-[400px] mx-auto mt-8 bg-danger-900"
     tabindex="-1"
   >
     <div
