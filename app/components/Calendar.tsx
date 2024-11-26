@@ -36,7 +36,7 @@ export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = '
     ({ start, end }: { start: Date; end: Date }) => {
       const newStartDate = format(start, 'yyyy-MM-dd')
       const newEndDate = format(end, 'yyyy-MM-dd')
-      if (newStartDate !== dateRange?.start && newEndDate !== dateRange?.end) {
+      if (newStartDate !== dateRange?.start || newEndDate !== dateRange?.end) {
         if (dateRange) {
           // skip on initial load
           onChangeDate?.(newStartDate, newEndDate)
