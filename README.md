@@ -2,7 +2,9 @@
 
 Synk Calendar is a web application designed to display Google Calendar contents.
 
-It was developed with use cases in mind such as sharing shifts or personal events, where the goal is to "provide free view-only access to calendar information."
+It was developed with use cases in mind such as sharing shifts or personal
+events, where the goal is to "provide free view-only access to calendar
+information."
 
 ## Features
 
@@ -36,12 +38,15 @@ cd synk-calendar
 pnpm install
 ```
 
-3. Set up environment variables. Create a `.env` file and configure the necessary variables:
+3. Set up environment variables. Create a `.env` file and configure the
+   necessary variables:
 
 ```
+# Specify the file path for the service account
 GOOGLE_APPLICATION_CREDENTIALS=path/to/your/credentials.json
+CALENDAR_IDS=id@domain.com,id2,id3
+# For Google Workspace, domain-wide delegation and delegated email address are required https://developers.google.com/admin-sdk/directory/v1/guides/delegation
 GOOGLE_AUTH_SUBJECT=your-email@example.com
-CALENDAR_IDS=id1,id2,id3
 # The following environment variables are only required if you're using reminders
 REMINDER_SETTINGS=[{"minutesBefore":10,"notificationType":"console"},{"minutesBefore":30,"notificationType":"webhook"}]
 WEBHOOK_URL=https://your-webhook-url.com

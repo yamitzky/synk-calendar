@@ -39,9 +39,11 @@ pnpm install
 3. 環境変数を設定します。`.env`ファイルを作成し、必要な変数を設定してください：
 
 ```
+# サービスアカウントのファイルパスを指定してください
 GOOGLE_APPLICATION_CREDENTIALS=path/to/your/credentials.json
+CALENDAR_IDS=id@domain.com,id2,id3
+# Google Workspace の場合はドメイン全体の委任と委任先のアドレス設定が必要です https://developers.google.com/admin-sdk/directory/v1/guides/delegation
 GOOGLE_AUTH_SUBJECT=your-email@example.com
-CALENDAR_IDS=id1,id2,id3
 # 以降の環境変数は、リマインダーを使う場合のみ必要です
 REMINDER_SETTINGS=[{"minutesBefore":10,"notificationType":"console"},{"minutesBefore":30,"notificationType":"webhook"}]
 WEBHOOK_URL=https://your-webhook-url.com
