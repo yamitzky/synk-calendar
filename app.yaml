@@ -1,0 +1,5 @@
+includes:
+- env.yaml
+
+runtime: nodejs20
+service: synk-calendar
