@@ -1,9 +1,46 @@
-env.yaml
-
+# Dependencies
 node_modules
+.pnp
+.pnp.js
 
+# Testing
+coverage
+
+# Production
+build
+dist
+
+# Misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Storybook
+storybook-static
+*storybook.log
+
+# Remix specific
 /.cache
 /build
-.env
+/public/build
 
-*storybook.log
+# Custom
+env.yaml

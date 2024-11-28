@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "../../vite.config.ts", "vitest.setup.ts", "vitest.config.ts"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "types": ["@remix-run/node", "vite/client", "vitest/globals", "@testing-library/jest-dom"],
+    "paths": {
+      "~/*": ["./app/*"],
+      "@synk-cal/core": ["../../packages/core/src"],
+      "@synk-cal/repository": ["../../packages/repository/src"],
+      "@synk-cal/usecase": ["../../packages/usecase/src"],
+    }
+  }
+}

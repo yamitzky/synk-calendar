@@ -1,0 +1,22 @@
+{
+  "name": "@synk-cal/cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@synk-cal/core": "workspace:*",
+    "@synk-cal/repository": "workspace:*",
+    "@synk-cal/usecase": "workspace:*",
+    "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.1.6",
+    "eslint": "^8.38.0"
+  }
+}

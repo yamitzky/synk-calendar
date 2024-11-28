@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`EventCell > aaaaa 1`] = `"asasfa"`;
+
+exports[`EventCell > matches snapshot 1`] = `
+<div>
+  <div
+    class="h-full p-0.5 overflow-hidden"
+  >
+    <div>
+      <p>
+        Test Event
+      </p>
+      <p
+        class="text-xs"
+      >
+        10:00 - 11:00
+      </p>
+    </div>
+  </div>
+</div>
+`;
