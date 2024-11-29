@@ -102,9 +102,6 @@ importers:
       accept-language-parser:
         specifier: ^1.5.0
         version: 1.5.0
-      eta:
-        specifier: ^3.5.0
-        version: 3.5.0
       framer-motion:
         specifier: ^11.11.17
         version: 11.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -205,6 +202,9 @@ importers:
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
+      valibot:
+        specifier: 1.0.0-beta.8
+        version: 1.0.0-beta.8(typescript@5.6.3)
     devDependencies:
       eslint:
         specifier: ^8.38.0
@@ -5698,6 +5698,14 @@ packages:
 
   valibot@0.41.0:
     resolution: {integrity: sha512-igDBb8CTYr8YTQlOKgaN9nSS0Be7z+WRuaeYqGf3Cjz3aKmSnqEmYnkfVjzIuumGqfHpa3fLIvMEAfhrpqN8ng==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  valibot@1.0.0-beta.8:
+    resolution: {integrity: sha512-OPAwJZtowb0j91b+bd77+ny7D1VVzsCzD7Jl9waLUlMprTsfI9Y3HHbW3hAQD7wKDKHsmGEesuiYWaYvcZL2wg==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -12938,6 +12946,10 @@ snapshots:
       sade: 1.8.1
 
   valibot@0.41.0(typescript@5.6.3):
+    optionalDependencies:
+      typescript: 5.6.3
+
+  valibot@1.0.0-beta.8(typescript@5.6.3):
     optionalDependencies:
       typescript: 5.6.3
 

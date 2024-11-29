@@ -3,6 +3,8 @@ import { config } from '@synk-cal/core'
 import { addMinutes, isSameMinute, parseISO, subMinutes } from 'date-fns'
 import { Eta } from 'eta'
 
+const DEFAULT_TEMPLATE = 'Reminder: "<%= it.title %>" starts in <%= it.minutesBefore %> minutes.'
+
 export async function processReminders(
   baseTime: Date,
   calendarRepositories: CalendarRepository[],
@@ -39,7 +41,7 @@ export async function processReminders(
         continue
       }
 
-      const message = eta.renderString(config.REMINDER_TEMPLATE, { ...setting, ...event })
+      const message = eta.renderString(config.REMINDER_TEMPLATE ?? DEFAULT_TEMPLATE, { ...setting, ...event })
 
       if (setting.target) {
         const isAttendee = event.people?.some((person) => person.email === setting.target)
