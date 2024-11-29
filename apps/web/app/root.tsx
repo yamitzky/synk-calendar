@@ -1,8 +1,18 @@
 import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node'
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react'
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
+  useRouteLoaderData,
+} from '@remix-run/react'
 
 import { NextUIProvider } from '@nextui-org/react'
 
+import { ErrorMessage } from '~/components/ErrorMessage'
 import { LocaleContext } from '~/hooks/useLocale'
 import { getLocaleFromAcceptLanguage } from '~/utils/locale'
 import stylesheet from './tailwind.css?url'
@@ -27,10 +37,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { locale } = useLoaderData<typeof loader>()
+  const data = useRouteLoaderData<typeof loader>('root')
 
   return (
-    <html lang={locale === 'ja' ? 'ja' : 'en'} className="dark">
+    <html lang={data?.locale} className="dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -39,7 +49,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <NextUIProvider>
-          <LocaleContext.Provider value={locale}>
+          <LocaleContext.Provider value={data?.locale}>
             {children}
             <ScrollRestoration />
             <Scripts />
@@ -52,4 +62,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return <Outlet />
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+
+  let errorMessage: React.ReactNode
+  if (isRouteErrorResponse(error)) {
+    errorMessage = <ErrorMessage title={`${error.status} ${error.statusText}`} message={error.data} />
+  } else if (error instanceof Error) {
+    errorMessage = <ErrorMessage title="Error" message={error.message} />
+  } else {
+    errorMessage = <ErrorMessage title="Unknown Error" />
+  }
+  return <div className="h-screen w-full p-4">{errorMessage}</div>
 }

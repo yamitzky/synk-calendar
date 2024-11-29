@@ -1,11 +1,10 @@
 import type { MetaFunction } from '@remix-run/node'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
-import { isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from '@remix-run/react'
+import { useLoaderData, useNavigate } from '@remix-run/react'
 import { config } from '@synk-cal/core'
 import { GoogleCalendarRepository } from '@synk-cal/repository'
 import { addDays, format, parseISO, startOfWeek, subDays } from 'date-fns'
 import { Calendar } from '~/components/Calendar'
-import { ErrorMessage } from '~/components/ErrorMessage'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Synk Calendar' }, { name: 'description', content: 'Calendar viewer' }]
@@ -64,16 +63,4 @@ export default function Index() {
       />
     </div>
   )
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError()
-
-  if (isRouteErrorResponse(error)) {
-    return <ErrorMessage title={`${error.status} ${error.statusText}`} message={error.data} />
-  }
-  if (error instanceof Error) {
-    return <ErrorMessage title="Error" message={error.message} />
-  }
-  return <ErrorMessage title="Unknown Error" />
 }
