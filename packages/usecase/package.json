@@ -1,5 +1,6 @@
 {
   "name": "@synk-cal/usecase",
+  "type": "module",
   "version": "1.0.0",
   "private": true,
   "main": "src/index.ts",
