@@ -3,11 +3,13 @@
   "private": true,
   "scripts": {
     "build": "pnpm run -r build",
+    "start": "pnpm --filter '@synk-cal/web' start",
     "dev": "pnpm --filter '@synk-cal/web' dev",
     "storybook": "pnpm --filter '@synk-cal/web' storybook",
     "lint": "pnpm run -r lint",
     "test": "LC_ALL=en_US.UTF-8 vitest",
-    "typecheck": "pnpm run -r typecheck"
+    "typecheck": "pnpm run -r typecheck",
+    "bundle-monorepo": "node bundle-monorepo.js"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.4",

@@ -3,3 +3,6 @@ includes:
 
 runtime: nodejs20
 service: synk-calendar
+
+build_env_variables:
+  GOOGLE_NODE_RUN_SCRIPTS: build,bundle-monorepo
