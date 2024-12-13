@@ -1,6 +1,5 @@
 {
   "name": "synk-cal",
-  "private": true,
   "scripts": {
     "build": "pnpm run -r build",
     "start": "pnpm --filter '@synk-cal/web' start",

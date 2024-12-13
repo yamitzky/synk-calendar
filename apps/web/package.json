@@ -1,6 +1,5 @@
 {
   "name": "@synk-cal/web",
-  "private": true,
   "sideEffects": false,
   "type": "module",
   "scripts": {
