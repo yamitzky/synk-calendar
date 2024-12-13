@@ -2,6 +2,7 @@
   "name": "@synk-cal/web",
   "sideEffects": false,
   "type": "module",
+  "version": "1.0.5",
   "main": "./build/server/index.js",
   "bin": {
     "synk-cal": "./bin/server.js"
@@ -69,11 +70,5 @@
     "typescript": "^5.1.6",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1"
-  },
-  "version": "1.0.3",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yamitzky/synk-calendar.git"
-  },
-  "license": "MIT"
+  }
 }
