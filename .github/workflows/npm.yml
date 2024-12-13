@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build
+        run: pnpm run --filter @synk-cal/web build
+
       - name: Publish to npm
         run: pnpm publish --filter @synk-cal/web --provenance --access public --no-git-checks
         env:
