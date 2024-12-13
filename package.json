@@ -29,5 +29,6 @@
     "type": "git",
     "url": "https://github.com/yamitzky/synk-calendar.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "version": "0.0.1"
 }
