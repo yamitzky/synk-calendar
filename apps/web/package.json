@@ -2,6 +2,10 @@
   "name": "@synk-cal/web",
   "sideEffects": false,
   "type": "module",
+  "main": "./build/server/index.js",
+  "bin": {
+    "synk-cal": "./bin/server.js"
+  },
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
@@ -17,6 +21,7 @@
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@nextui-org/react": "^2.4.8",
+    "@remix-run/express": "^2.14.0",
     "@remix-run/node": "^2.14.0",
     "@remix-run/react": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
@@ -25,6 +30,7 @@
     "@synk-cal/usecase": "workspace:*",
     "accept-language-parser": "^1.5.0",
     "date-fns": "^4.1.0",
+    "express": "^4.21.2",
     "framer-motion": "^11.11.17",
     "html-react-parser": "^5.1.18",
     "isbot": "^4.1.0",
@@ -58,5 +64,11 @@
     "typescript": "^5.1.6",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1"
-  }
+  },
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yamitzky/synk-calendar.git"
+  },
+  "license": "MIT"
 }
