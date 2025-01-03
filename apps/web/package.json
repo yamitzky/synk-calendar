@@ -7,11 +7,7 @@
   "bin": {
     "synk-cal": "./bin/server.js"
   },
-  "files": [
-    "bin",
-    "public",
-    "build"
-  ],
+  "files": ["bin", "public", "build"],
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
@@ -34,12 +30,11 @@
     "@synk-cal/core": "workspace:*",
     "@synk-cal/repository": "workspace:*",
     "@synk-cal/usecase": "workspace:*",
+    "@synk-cal/google-cloud": "workspace:*",
     "accept-language-parser": "^1.5.0",
     "date-fns": "^4.1.0",
     "express": "^4.21.2",
     "framer-motion": "^11.11.17",
-    "gcp-metadata": "^6.1.0",
-    "google-auth-library": "^9.15.0",
     "html-react-parser": "^5.1.18",
     "isbot": "^4.1.0",
     "react": "^18.2.0",

@@ -2,10 +2,9 @@ import type { MetaFunction } from '@remix-run/node'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData, useNavigate } from '@remix-run/react'
 import { type User, config } from '@synk-cal/core'
+import { extractUserFromHeader } from '@synk-cal/google-cloud'
 import { GoogleCalendarRepository } from '@synk-cal/repository'
 import { addDays, format, parseISO, startOfWeek, subDays } from 'date-fns'
-import metadata from 'gcp-metadata'
-import { OAuth2Client } from 'google-auth-library'
 import { Calendar } from '~/components/Calendar'
 
 export const meta: MetaFunction = () => {
@@ -21,54 +20,14 @@ function getDateRange(searchParams: URLSearchParams) {
   return { startDate, endDate }
 }
 
-const oAuth2Client = new OAuth2Client()
-
-// Cache externally fetched information for future invocations
-let _aud = ''
-
-async function audience(): Promise<string> {
-  if (!_aud && (await metadata.isAvailable())) {
-    const project_number = await metadata.project('numeric-project-id')
-    const project_id = await metadata.project('project-id')
-
-    _aud = `/projects/${project_number}/apps/${project_id}`
-  }
-
-  return _aud
-}
-
-async function validateAssertion(assertion: string | null) {
-  if (!assertion) {
-    return {}
-  }
-
-  const aud = await audience()
-
-  const response = await oAuth2Client.getIapPublicKeys()
-  const ticket = await oAuth2Client.verifySignedJwtWithCertsAsync(assertion, response.pubkeys, aud, [
-    'https://cloud.google.com/iap',
-  ])
-  const payload = ticket.getPayload()
-
-  return {
-    email: payload?.email,
-    sub: payload?.sub,
-  }
-}
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
 
   const isMobile = request.headers.get('user-agent')?.includes('Mobile/') ?? false
 
-  // Verify IAP JWT and get user info
-  const assertion = request.headers.get('x-goog-iap-jwt-assertion')
   let user: User | undefined = undefined
   try {
-    const info = await validateAssertion(assertion)
-    if (info.email) {
-      user = { email: info.email }
-    }
+    user = await extractUserFromHeader(request.headers)
   } catch (error) {
     console.log(error)
   }
