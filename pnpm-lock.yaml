@@ -114,6 +114,12 @@ importers:
       framer-motion:
         specifier: ^11.11.17
         version: 11.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      gcp-metadata:
+        specifier: ^6.1.0
+        version: 6.1.0
+      google-auth-library:
+        specifier: ^9.15.0
+        version: 9.15.0
       html-react-parser:
         specifier: ^5.1.18
         version: 5.1.18(@types/react@18.3.12)(react@18.3.1)

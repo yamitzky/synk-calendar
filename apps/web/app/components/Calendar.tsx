@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
-import type { CalendarEvent } from '@synk-cal/core'
+import type { CalendarEvent, User } from '@synk-cal/core'
 import { format } from 'date-fns'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
@@ -15,6 +15,7 @@ import { EventDetail } from './EventDetail'
 import type { CalendarViewType } from './viewType'
 
 type Props = {
+  user?: User
   calendars: Array<{ calendarId: string; events: CalendarEvent[] }>
   onChangeDate?: (startDate: string, endDate: string) => void
   initialView?: CalendarViewType
@@ -27,7 +28,7 @@ function getColor(index: number): string {
   return colors[index % colors.length] ?? colors[0]
 }
 
-export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = 'dayGridMonth' }: Props) => {
+export const Calendar = ({ user, calendars, onChangeDate, initialDate, initialView = 'dayGridMonth' }: Props) => {
   const [dateRange, setDateRange] = useState<{ start: string; end: string }>()
 
   const locale = useLocale()
@@ -47,9 +48,20 @@ export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = '
     [onChangeDate, dateRange],
   )
 
+  const [query, setQuery] = useState('')
+
   const eventSources = useMemo(() => {
-    return calendars.map((cal, index) => ({ events: cal.events, color: getColor(index) }))
-  }, [calendars])
+    return calendars.map((cal, index) => {
+      const events = query
+        ? cal.events.filter(
+            (e) =>
+              e.title?.toLowerCase().includes(query.toLowerCase()) ||
+              e.people?.some((p) => p.email?.toLowerCase().includes(query.toLowerCase())),
+          )
+        : cal.events
+      return { events: events, color: getColor(index) }
+    })
+  }, [calendars, query])
 
   const calendarRef = useRef<FullCalendar>(null)
   const [currentViewType, setViewType] = useState<CalendarViewType | undefined>(initialView)
@@ -57,6 +69,7 @@ export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = '
   return (
     <div className="flex flex-col h-full space-y-2 sm:space-y-4">
       <CalendarHeader
+        user={user}
         start={dateRange?.start}
         end={dateRange?.end}
         onToday={() => calendarRef.current?.getApi().today()}
@@ -67,6 +80,7 @@ export const Calendar = ({ calendars, onChangeDate, initialDate, initialView = '
           setViewType(viewType)
         }}
         initialView={initialView}
+        onSearch={(query) => setQuery(query)}
       />
       <div className="flex-1 overflow-x-auto">
         <div
