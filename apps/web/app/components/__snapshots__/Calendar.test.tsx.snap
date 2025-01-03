@@ -40,10 +40,10 @@ exports[`Calendar > renders correctly with dayGridMonth view 1`] = `
         May 1 – June 11, 2023
       </h1>
       <div
-        class="w-40 row-start-1 col-start-2 sm:col-start-3"
+        class="row-start-1 col-start-2 sm:col-start-3 flex space-x-1"
       >
         <div
-          class="group flex flex-col w-full transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)]"
+          class="group flex flex-col transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)] w-40"
           data-filled="true"
           data-has-value="true"
           data-slot="base"
@@ -138,6 +138,13 @@ exports[`Calendar > renders correctly with dayGridMonth view 1`] = `
             </button>
           </div>
         </div>
+        <button
+          aria-label="Search"
+          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+          type="button"
+        >
+          🔍
+        </button>
       </div>
     </div>
     <div
@@ -1870,10 +1877,10 @@ exports[`Calendar > renders correctly with timeGridDay view 1`] = `
         May 1, 2023
       </h1>
       <div
-        class="w-40 row-start-1 col-start-2 sm:col-start-3"
+        class="row-start-1 col-start-2 sm:col-start-3 flex space-x-1"
       >
         <div
-          class="group flex flex-col w-full transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)]"
+          class="group flex flex-col transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)] w-40"
           data-filled="true"
           data-has-value="true"
           data-slot="base"
@@ -1968,6 +1975,13 @@ exports[`Calendar > renders correctly with timeGridDay view 1`] = `
             </button>
           </div>
         </div>
+        <button
+          aria-label="Search"
+          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+          type="button"
+        >
+          🔍
+        </button>
       </div>
     </div>
     <div
@@ -3042,10 +3056,10 @@ exports[`Calendar > renders correctly with timeGridFourDay view 1`] = `
         May 1 – 4, 2023
       </h1>
       <div
-        class="w-40 row-start-1 col-start-2 sm:col-start-3"
+        class="row-start-1 col-start-2 sm:col-start-3 flex space-x-1"
       >
         <div
-          class="group flex flex-col w-full transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)]"
+          class="group flex flex-col transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)] w-40"
           data-filled="true"
           data-has-value="true"
           data-slot="base"
@@ -3140,6 +3154,13 @@ exports[`Calendar > renders correctly with timeGridFourDay view 1`] = `
             </button>
           </div>
         </div>
+        <button
+          aria-label="Search"
+          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+          type="button"
+        >
+          🔍
+        </button>
       </div>
     </div>
     <div
@@ -4429,10 +4450,10 @@ exports[`Calendar > renders correctly with timeGridWeek view 1`] = `
         May 1 – 7, 2023
       </h1>
       <div
-        class="w-40 row-start-1 col-start-2 sm:col-start-3"
+        class="row-start-1 col-start-2 sm:col-start-3 flex space-x-1"
       >
         <div
-          class="group flex flex-col w-full transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)]"
+          class="group flex flex-col transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)] w-40"
           data-filled="true"
           data-has-value="true"
           data-slot="base"
@@ -4527,6 +4548,13 @@ exports[`Calendar > renders correctly with timeGridWeek view 1`] = `
             </button>
           </div>
         </div>
+        <button
+          aria-label="Search"
+          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+          type="button"
+        >
+          🔍
+        </button>
       </div>
     </div>
     <div
@@ -5993,10 +6021,10 @@ exports[`Calendar > uses initialDate when provided 1`] = `
         January 1, 2022
       </h1>
       <div
-        class="w-40 row-start-1 col-start-2 sm:col-start-3"
+        class="row-start-1 col-start-2 sm:col-start-3 flex space-x-1"
       >
         <div
-          class="group flex flex-col w-full transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)]"
+          class="group flex flex-col transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)] w-40"
           data-filled="true"
           data-has-value="true"
           data-slot="base"
@@ -6091,6 +6119,13 @@ exports[`Calendar > uses initialDate when provided 1`] = `
             </button>
           </div>
         </div>
+        <button
+          aria-label="Search"
+          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-small gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground min-w-10 w-10 h-10 data-[hover=true]:opacity-hover"
+          type="button"
+        >
+          🔍
+        </button>
       </div>
     </div>
     <div
