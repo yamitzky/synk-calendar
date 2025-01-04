@@ -34,6 +34,7 @@ export function UserInfo({ user, onClick, className }: Props) {
   return (
     <Avatar
       name={name}
+      aria-label="User avatar"
       src={imageURL}
       showFallback
       className={twMerge(className, onClick ? 'cursor-pointer' : '')}

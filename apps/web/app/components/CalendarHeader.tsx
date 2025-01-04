@@ -85,6 +85,7 @@ export const CalendarHeader = ({
             startContent="🔍"
             className="w-40"
             autoFocus
+            placeholder="Search..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {
@@ -105,7 +106,7 @@ export const CalendarHeader = ({
             }}
           />
         ) : (
-          <Button isIconOnly radius="full" onClick={() => setIsEditing(true)} aria-label="Search">
+          <Button isIconOnly radius="full" onClick={() => setIsEditing(true)} aria-label="Open Search">
             🔍
           </Button>
         )}

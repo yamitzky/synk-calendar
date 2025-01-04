@@ -22,10 +22,18 @@ export const Default: Story = {
   },
 }
 
-export const Fallback: Story = {
+export const NoGravatar: Story = {
   args: {
     user: {
       name: 'John Doe',
+      email: 'john@yamitzky.dev',
+    },
+  },
+}
+
+export const NoGravatarWithEmail: Story = {
+  args: {
+    user: {
       email: 'john@yamitzky.dev',
     },
   },
