@@ -56,4 +56,31 @@ describe('CalendarHeader', () => {
     render(<CalendarHeader start="2023-05-01" end="2023-05-02" />)
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('May 1, 2023')
   })
+
+  it('calls onSearch when search input changes', () => {
+    const onSearch = vi.fn()
+    render(<CalendarHeader onSearch={onSearch} />)
+
+    const searchButton = screen.getByLabelText('Open Search')
+    fireEvent.click(searchButton)
+
+    const searchInput = screen.getByPlaceholderText('Search...')
+    fireEvent.change(searchInput, { target: { value: 'meeting' } })
+    fireEvent.keyDown(searchInput, { key: 'Enter' })
+
+    expect(onSearch).toHaveBeenCalledWith('meeting')
+  })
+
+  it('shows search input when user icon is clicked', () => {
+    const user = { email: 'test@example.com' }
+    render(<CalendarHeader user={user} onSearch={vi.fn()} />)
+
+    const searchInput = screen.queryByPlaceholderText('Search...')
+    expect(searchInput).toBeNull()
+
+    const userIcon = screen.getByLabelText('User avatar')
+    fireEvent.click(userIcon)
+
+    expect(screen.getByPlaceholderText('Search...')).toBeVisible()
+  })
 })

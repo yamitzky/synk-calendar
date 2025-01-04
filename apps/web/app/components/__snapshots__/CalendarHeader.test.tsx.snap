@@ -37,10 +37,10 @@ exports[`CalendarHeader > renders correctly 1`] = `
       May 1, 2023
     </h1>
     <div
-      class="w-40 row-start-1 col-start-2 sm:col-start-3"
+      class="row-start-1 col-start-2 sm:col-start-3 flex space-x-1"
     >
       <div
-        class="group flex flex-col w-full transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)]"
+        class="group flex flex-col transition-background motion-reduce:transition-none !duration-150 group relative justify-end data-[has-label=true]:mt-[calc(theme(fontSize.small)_+_10px)] w-40"
         data-slot="base"
       >
         <div

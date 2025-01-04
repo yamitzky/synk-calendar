@@ -40,3 +40,31 @@ export const DayView: Story = {
     initialView: 'timeGridDay',
   },
 }
+
+export const WithUser: Story = {
+  args: {
+    start: '2023-01-01',
+    end: '2023-01-08',
+    initialView: 'timeGridWeek',
+    user: { email: 'negiga@gmail.com' },
+  },
+}
+
+export const WithSearch: Story = {
+  args: {
+    start: '2023-01-01',
+    end: '2023-01-08',
+    initialView: 'timeGridWeek',
+    onSearch: fn(),
+  },
+}
+
+export const WithSearchAndUser: Story = {
+  args: {
+    start: '2023-01-01',
+    end: '2023-01-08',
+    initialView: 'timeGridWeek',
+    user: { email: 'negiga@gmail.com' },
+    onSearch: fn(),
+  },
+}
