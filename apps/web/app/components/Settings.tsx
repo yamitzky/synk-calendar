@@ -1,14 +1,68 @@
-import { Card, CardBody, CardHeader, Switch } from '@nextui-org/react'
+import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import type { User } from '@synk-cal/core'
 import { UserInfo } from '~/components/UserInfo'
 
+import { Button, Input, Select, SelectItem } from '@nextui-org/react'
+import { twMerge } from 'tailwind-merge'
+import useLocale from '~/hooks/useLocale'
+
 type Props = {
   user: User
+  reminders: readonly ReminderSetting[]
+  onChange: (reminders: ReminderSetting[]) => void
+  className?: string
 }
 
-export function Settings({ user }: Props) {
+export type ReminderSetting = {
+  id: string
+  minutes: number
+  type: 'webhook'
+}
+
+const NOTIFY_BEFORE_OPTIONS = [
+  { value: 5, unit: 'min', amount: 5 },
+  { value: 10, unit: 'min', amount: 10 },
+  { value: 15, unit: 'min', amount: 15 },
+  { value: 30, unit: 'min', amount: 30 },
+  { value: 60, unit: 'hour', amount: 1 },
+  { value: 120, unit: 'hour', amount: 2 },
+  { value: 180, unit: 'hour', amount: 3 },
+  { value: 360, unit: 'hour', amount: 6 },
+  { value: 720, unit: 'hour', amount: 12 },
+  { value: 1440, unit: 'day', amount: 1 },
+  { value: 2880, unit: 'day', amount: 2 },
+  { value: 4320, unit: 'day', amount: 3 },
+  { value: 10080, unit: 'day', amount: 7 },
+] as const
+
+const unitInJapanese = {
+  min: '分',
+  hour: '時間',
+  day: '日',
+} as const
+
+export function ReminderSettings({ user, reminders, onChange, className }: Props) {
+  const addReminder = () => {
+    const newReminder: ReminderSetting = {
+      id: crypto.randomUUID(),
+      minutes: 5,
+      type: 'webhook',
+    }
+    onChange([...reminders, newReminder])
+  }
+
+  const removeReminder = (id: string) => {
+    onChange(reminders.filter((reminder) => reminder.id !== id))
+  }
+
+  const updateReminder = (id: string, minutes: number) => {
+    onChange(reminders.map((reminder) => (reminder.id === id ? { ...reminder, minutes } : reminder)))
+  }
+
+  const locale = useLocale()
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className={twMerge('flex flex-col gap-4', className)}>
       <Card>
         <CardHeader className="flex gap-4">
           <UserInfo user={user} />
@@ -20,49 +74,44 @@ export function Settings({ user }: Props) {
       </Card>
 
       <Card>
-        <CardHeader>
-          <h2 className="text-lg font-semibold">Notifications</h2>
+        <CardHeader className="flex justify-between items-center">
+          <h2 className="text-lg font-semibold">{locale === 'ja' ? 'リマインダー' : 'Reminder Settings'}</h2>
+          <Button color="primary" variant="flat" onClick={addReminder} className="px-4">
+            ＋
+          </Button>
         </CardHeader>
         <CardBody>
           <div className="flex flex-col gap-4">
-            <div className="flex justify-between">
-              <div>
-                <p>Email Notifications</p>
-                <p className="text-small text-default-500">Receive email notifications for events</p>
+            {reminders.map((reminder) => (
+              <div key={reminder.id} className="flex items-center gap-4">
+                <Select
+                  label={locale === 'ja' ? '通知タイミング' : 'Notify before'}
+                  isRequired
+                  selectedKeys={[reminder.minutes.toString()]}
+                  className="max-w-[200px]"
+                  onChange={(e) => updateReminder(reminder.id, Number(e.target.value))}
+                  items={NOTIFY_BEFORE_OPTIONS}
+                >
+                  {({ unit, amount, value }) => {
+                    const label = `${amount} ${locale === 'ja' ? unitInJapanese[unit] : unit}`
+                    return (
+                      <SelectItem key={value.toString()} textValue={label}>
+                        {label}
+                      </SelectItem>
+                    )
+                  }}
+                </Select>
+                <Input
+                  label={locale === 'ja' ? '通知タイプ' : 'Notification type'}
+                  value="Webhook"
+                  isReadOnly
+                  className="max-w-[200px]"
+                />
+                <Button color="danger" variant="flat" size="sm" onClick={() => removeReminder(reminder.id)}>
+                  ❌
+                </Button>
               </div>
-              <Switch defaultSelected />
-            </div>
-            <div className="flex justify-between">
-              <div>
-                <p>Desktop Notifications</p>
-                <p className="text-small text-default-500">Show desktop notifications for upcoming events</p>
-              </div>
-              <Switch defaultSelected />
-            </div>
-          </div>
-        </CardBody>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <h2 className="text-lg font-semibold">Calendar Display</h2>
-        </CardHeader>
-        <CardBody>
-          <div className="flex flex-col gap-4">
-            <div className="flex justify-between">
-              <div>
-                <p>Show Weekends</p>
-                <p className="text-small text-default-500">Display weekend days in calendar view</p>
-              </div>
-              <Switch defaultSelected />
-            </div>
-            <div className="flex justify-between">
-              <div>
-                <p>24-hour Format</p>
-                <p className="text-small text-default-500">Use 24-hour time format</p>
-              </div>
-              <Switch />
-            </div>
+            ))}
           </div>
         </CardBody>
       </Card>
