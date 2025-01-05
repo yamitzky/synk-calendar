@@ -1,16 +1,12 @@
 import { Card, CardBody, CardHeader, Switch } from '@nextui-org/react'
 import type { User } from '@synk-cal/core'
-import { UserInfo } from './UserInfo'
+import { UserInfo } from '~/components/UserInfo'
 
 type Props = {
-  user?: User
+  user: User
 }
 
 export function Settings({ user }: Props) {
-  if (!user) {
-    return <div>Please sign in to view settings.</div>
-  }
-
   return (
     <div className="flex flex-col gap-4">
       <Card>

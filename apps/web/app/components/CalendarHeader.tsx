@@ -3,7 +3,7 @@ import type { User } from '@synk-cal/core'
 import { subDays } from 'date-fns'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { UserInfo } from '~/components/UserInfo'
+import { UserInfoMenu } from '~/components/UserInfoMenu'
 import type { CalendarViewType } from '~/components/viewType'
 import useLocale from '~/hooks/useLocale'
 
@@ -111,7 +111,7 @@ export const CalendarHeader = ({
           </Button>
         )}
         {user && (
-          <UserInfo
+          <UserInfoMenu
             user={user}
             onClickShowMyEvents={() => {
               setIsEditing(true)

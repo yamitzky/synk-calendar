@@ -1,11 +1,10 @@
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Avatar } from '@nextui-org/react'
 import type { User } from '@synk-cal/core'
 import { useEffect, useState } from 'react'
-import useLocale from '~/hooks/useLocale'
 
 type Props = {
+  as?: 'button'
   user: User
-  onClickShowMyEvents?: () => void
   className?: string
 }
 
@@ -18,11 +17,12 @@ async function generateSHA256Hash(message: string) {
   return hashHex
 }
 
-export function UserInfo({ user, onClickShowMyEvents, className }: Props) {
+export function UserInfo({ as, user, className, ...props }: Props) {
   let name = user.name
   if (!name) {
     name = user.email.split('@')[0]
   }
+
   const [imageURL, setImageURL] = useState('')
   useEffect(() => {
     ;(async () => {
@@ -31,24 +31,8 @@ export function UserInfo({ user, onClickShowMyEvents, className }: Props) {
       setImageURL(gravatarURL)
     })()
   }, [user.email])
-  const locale = useLocale()
+
   return (
-    <Dropdown>
-      <DropdownTrigger>
-        <Avatar as="button" name={name} aria-label="User avatar" src={imageURL} className={className} showFallback />
-      </DropdownTrigger>
-      <DropdownMenu aria-label="User actions">
-        <DropdownItem key="setting" href="/settings">
-          {locale === 'ja' ? '設定' : 'Settings'}
-        </DropdownItem>
-        {onClickShowMyEvents ? (
-          <DropdownItem key="search" onClick={onClickShowMyEvents}>
-            {locale === 'ja' ? '自分のイベント' : 'My Events'}
-          </DropdownItem>
-        ) : (
-          <></>
-        )}
-      </DropdownMenu>
-    </Dropdown>
+    <Avatar as={as} name={name} aria-label="User avatar" src={imageURL} className={className} showFallback {...props} />
   )
 }
