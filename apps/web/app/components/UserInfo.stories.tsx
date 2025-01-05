@@ -6,7 +6,7 @@ const meta = {
   component: UserInfo,
   tags: ['autodocs'],
   args: {
-    onClick: fn(),
+    onClickShowMyEvents: fn(),
   },
 } satisfies Meta<typeof UserInfo>
 
@@ -36,5 +36,14 @@ export const NoGravatarWithEmail: Story = {
     user: {
       email: 'john@yamitzky.dev',
     },
+  },
+}
+
+export const NoSearch: Story = {
+  args: {
+    user: {
+      email: 'john@yamitzky.dev',
+    },
+    onClickShowMyEvents: undefined,
   },
 }

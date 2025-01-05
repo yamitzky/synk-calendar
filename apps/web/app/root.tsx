@@ -6,6 +6,8 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  useHref,
+  useNavigate,
   useRouteError,
   useRouteLoaderData,
 } from '@remix-run/react'
@@ -38,6 +40,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData<typeof loader>('root')
+  const navigate = useNavigate()
 
   return (
     <html lang={data?.locale} className="dark">
@@ -48,7 +51,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <NextUIProvider>
+        <NextUIProvider navigate={navigate} useHref={useHref}>
           <LocaleContext.Provider value={data?.locale}>
             {children}
             <ScrollRestoration />

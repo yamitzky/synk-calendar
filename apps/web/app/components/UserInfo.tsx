@@ -1,11 +1,11 @@
-import { Avatar } from '@nextui-org/react'
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import type { User } from '@synk-cal/core'
 import { useEffect, useState } from 'react'
-import { twMerge } from 'tailwind-merge'
+import useLocale from '~/hooks/useLocale'
 
 type Props = {
   user: User
-  onClick?: () => void
+  onClickShowMyEvents?: () => void
   className?: string
 }
 
@@ -18,7 +18,7 @@ async function generateSHA256Hash(message: string) {
   return hashHex
 }
 
-export function UserInfo({ user, onClick, className }: Props) {
+export function UserInfo({ user, onClickShowMyEvents, className }: Props) {
   let name = user.name
   if (!name) {
     name = user.email.split('@')[0]
@@ -31,14 +31,24 @@ export function UserInfo({ user, onClick, className }: Props) {
       setImageURL(gravatarURL)
     })()
   }, [user.email])
+  const locale = useLocale()
   return (
-    <Avatar
-      name={name}
-      aria-label="User avatar"
-      src={imageURL}
-      showFallback
-      className={twMerge(className, onClick ? 'cursor-pointer' : '')}
-      onClick={onClick}
-    />
+    <Dropdown>
+      <DropdownTrigger>
+        <Avatar as="button" name={name} aria-label="User avatar" src={imageURL} className={className} showFallback />
+      </DropdownTrigger>
+      <DropdownMenu aria-label="User actions">
+        <DropdownItem key="setting" href="/settings">
+          {locale === 'ja' ? '設定' : 'Settings'}
+        </DropdownItem>
+        {onClickShowMyEvents ? (
+          <DropdownItem key="search" onClick={onClickShowMyEvents}>
+            {locale === 'ja' ? '自分のイベント' : 'My Events'}
+          </DropdownItem>
+        ) : (
+          <></>
+        )}
+      </DropdownMenu>
+    </Dropdown>
   )
 }

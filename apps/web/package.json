@@ -7,7 +7,11 @@
   "bin": {
     "synk-cal": "./bin/server.js"
   },
-  "files": ["bin", "public", "build"],
+  "files": [
+    "bin",
+    "public",
+    "build"
+  ],
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
@@ -28,9 +32,9 @@
     "@remix-run/react": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
     "@synk-cal/core": "workspace:*",
+    "@synk-cal/google-cloud": "workspace:*",
     "@synk-cal/repository": "workspace:*",
     "@synk-cal/usecase": "workspace:*",
-    "@synk-cal/google-cloud": "workspace:*",
     "accept-language-parser": "^1.5.0",
     "date-fns": "^4.1.0",
     "express": "^4.21.2",
@@ -54,6 +58,7 @@
     "@storybook/test": "^8.4.5",
     "@testing-library/jest-dom": "6.4.7",
     "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/accept-language-parser": "^1.5.6",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",

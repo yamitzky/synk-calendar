@@ -10,7 +10,12 @@ type Props = {
 export const EventDetail = ({ title, start, end, description, location, people, conference, className }: Props) => {
   const locale = useLocale()
   return (
-    <div className={twMerge('space-y-2', className)}>
+    <div
+      className={twMerge(
+        'space-y-2 [&_a]:text-teal-500 [&_a]:underline [&_a]:transition [&_a:hover]:opacity-80',
+        className,
+      )}
+    >
       <p className="font-bold text-lg">{title}</p>
       <p>{formatRange(locale, start, end)}</p>
       {conference && (

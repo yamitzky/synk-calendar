@@ -113,7 +113,7 @@ export const CalendarHeader = ({
         {user && (
           <UserInfo
             user={user}
-            onClick={() => {
+            onClickShowMyEvents={() => {
               setIsEditing(true)
               setQuery(user.email)
               onSearch?.(user.email)
