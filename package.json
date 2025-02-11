@@ -9,7 +9,7 @@
     "test": "LC_ALL=en_US.UTF-8 vitest",
     "typecheck": "pnpm run -r typecheck",
     "bundle-monorepo": "node bundle-monorepo.js",
-    "release": "semantic-release"
+    "release": "release-it"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.4",
