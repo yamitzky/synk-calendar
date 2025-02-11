@@ -9,6 +9,10 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yamitzky/synk-calendar.git"
+  },
   "dependencies": {
     "@google-cloud/firestore": "^7.1.0",
     "@synk-cal/core": "workspace:*",
