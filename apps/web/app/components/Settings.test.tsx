@@ -10,7 +10,7 @@ describe('ReminderSettings', () => {
   }
 
   it('renders user information', () => {
-    render(<ReminderSettings user={userInfo} reminders={[]} onChange={() => {}} />)
+    render(<ReminderSettings user={userInfo} reminders={[]} onChange={vi.fn()} />)
     expect(screen.getByText('Test User')).toBeInTheDocument()
     expect(screen.getByText('test@example.com')).toBeInTheDocument()
   })
@@ -20,7 +20,7 @@ describe('ReminderSettings', () => {
       { id: '1', minutes: 5, type: 'webhook' },
       { id: '2', minutes: 30, type: 'webhook' },
     ] as const
-    render(<ReminderSettings user={userInfo} reminders={reminders} onChange={() => {}} />)
+    render(<ReminderSettings user={userInfo} reminders={reminders} onChange={vi.fn()} />)
 
     expect(screen.getByRole('button', { name: '5 min Notify before' }))
     expect(screen.getByRole('button', { name: '30 min Notify before' }))

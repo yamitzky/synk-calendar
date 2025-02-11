@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "../../vite.config.ts", "vitest.setup.ts", "vitest.config.ts"],
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "../../vite.config.ts", "../../vitest.setup.ts", "vitest.config.ts", "vitest.setup.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "types": ["@remix-run/node", "vite/client", "vitest/globals", "@testing-library/jest-dom"],

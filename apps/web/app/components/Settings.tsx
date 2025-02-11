@@ -1,5 +1,5 @@
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
-import type { User } from '@synk-cal/core'
+import type { ReminderSetting, User } from '@synk-cal/core'
 import { UserInfo } from '~/components/UserInfo'
 
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
@@ -11,12 +11,6 @@ type Props = {
   reminders: readonly ReminderSetting[]
   onChange: (reminders: ReminderSetting[]) => void
   className?: string
-}
-
-export type ReminderSetting = {
-  id: string
-  minutes: number
-  type: 'webhook'
 }
 
 const NOTIFY_BEFORE_OPTIONS = [
@@ -45,18 +39,22 @@ export function ReminderSettings({ user, reminders, onChange, className }: Props
   const addReminder = () => {
     const newReminder: ReminderSetting = {
       id: crypto.randomUUID(),
-      minutes: 5,
-      type: 'webhook',
+      minutesBefore: 5,
+      notificationType: 'webhook',
     }
     onChange([...reminders, newReminder])
   }
 
-  const removeReminder = (id: string) => {
+  const removeReminder = (id: string | number) => {
     onChange(reminders.filter((reminder) => reminder.id !== id))
   }
 
-  const updateReminder = (id: string, minutes: number) => {
-    onChange(reminders.map((reminder) => (reminder.id === id ? { ...reminder, minutes } : reminder)))
+  const updateReminder = (id: string | number, minutesBefore: number) => {
+    onChange(
+      reminders.map((reminder) =>
+        reminder.id === id ? ({ ...reminder, minutesBefore } satisfies ReminderSetting) : reminder,
+      ),
+    )
   }
 
   const locale = useLocale()
@@ -82,14 +80,14 @@ export function ReminderSettings({ user, reminders, onChange, className }: Props
         </CardHeader>
         <CardBody>
           <div className="flex flex-col gap-4">
-            {reminders.map((reminder) => (
+            {reminders.map((reminder, i) => (
               <div key={reminder.id} className="flex items-center gap-4">
                 <Select
                   label={locale === 'ja' ? '通知タイミング' : 'Notify before'}
                   isRequired
-                  selectedKeys={[reminder.minutes.toString()]}
+                  selectedKeys={[reminder.minutesBefore.toString()]}
                   className="max-w-[200px]"
-                  onChange={(e) => updateReminder(reminder.id, Number(e.target.value))}
+                  onChange={(e) => updateReminder(reminder.id ?? i, Number(e.target.value))}
                   items={NOTIFY_BEFORE_OPTIONS}
                 >
                   {({ unit, amount, value }) => {
@@ -107,7 +105,7 @@ export function ReminderSettings({ user, reminders, onChange, className }: Props
                   isReadOnly
                   className="max-w-[200px]"
                 />
-                <Button color="danger" variant="flat" size="sm" onClick={() => removeReminder(reminder.id)}>
+                <Button color="danger" variant="flat" size="sm" onClick={() => removeReminder(reminder.id ?? i)}>
                   ❌
                 </Button>
               </div>

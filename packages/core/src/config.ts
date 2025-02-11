@@ -15,7 +15,9 @@ export const ConfigSchema = v.object({
   REMINDER_SETTINGS: v.pipe(
     v.optional(v.string()),
     v.transform((value) => {
-      if (!value) return []
+      if (!value) {
+        return []
+      }
       try {
         return JSON.parse(value)
       } catch {
@@ -25,6 +27,9 @@ export const ConfigSchema = v.object({
     v.array(reminderSettingSchema),
   ),
   REMINDER_TEMPLATE: v.optional(v.string()),
+  REMINDER_SETTINGS_PROVIDER: v.optional(v.union([v.literal('firestore')])),
+  REMINDER_SETTINGS_FIRESTORE_DATABASE_ID: v.optional(v.string()),
+  AUTH_PROVIDER: v.optional(v.union([v.literal('google-iap')])),
   WEBHOOK_URL: v.optional(v.pipe(v.string(), v.url())),
 })
 
@@ -35,7 +40,10 @@ export function parseConfig(env: NodeJS.ProcessEnv): Config {
     GOOGLE_AUTH_SUBJECT: env.GOOGLE_AUTH_SUBJECT,
     CALENDAR_IDS: env.CALENDAR_IDS,
     REMINDER_SETTINGS: env.REMINDER_SETTINGS,
+    REMINDER_SETTINGS_PROVIDER: env.REMINDER_SETTINGS_PROVIDER,
+    REMINDER_SETTINGS_FIRESTORE_DATABASE_ID: env.REMINDER_SETTINGS_FIRESTORE_DATABASE_ID,
     REMINDER_TEMPLATE: env.REMINDER_TEMPLATE,
+    AUTH_PROVIDER: env.AUTH_PROVIDER,
     WEBHOOK_URL: env.WEBHOOK_URL,
   })
 }

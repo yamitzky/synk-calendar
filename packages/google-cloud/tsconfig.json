@@ -4,6 +4,6 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../repository/src/google_calendar.test.ts", "../repository/src/google_calendar.ts"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }

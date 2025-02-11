@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@synk-cal/core": "workspace:*",
+    "@google-cloud/firestore": "^7.1.0",
     "gcp-metadata": "^6.0.0",
     "google-auth-library": "^9.4.1"
   },

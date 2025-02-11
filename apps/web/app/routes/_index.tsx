@@ -1,11 +1,11 @@
 import type { MetaFunction } from '@remix-run/node'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData, useNavigate } from '@remix-run/react'
-import { type User, config } from '@synk-cal/core'
-import { extractUserFromHeader } from '@synk-cal/google-cloud'
+import { config } from '@synk-cal/core'
 import { GoogleCalendarRepository } from '@synk-cal/repository'
 import { addDays, format, parseISO, startOfWeek, subDays } from 'date-fns'
 import { Calendar } from '~/components/Calendar'
+import { getAuthRepository } from '~/services/getAuthRepository'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Synk Calendar' }, { name: 'description', content: 'Calendar viewer' }]
@@ -25,12 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const isMobile = request.headers.get('user-agent')?.includes('Mobile/') ?? false
 
-  let user: User | undefined = undefined
-  try {
-    user = await extractUserFromHeader(request.headers)
-  } catch (error) {
-    console.log(error)
-  }
+  const user = await getAuthRepository()?.getUserFromHeader(request.headers)
 
   const { startDate, endDate } = getDateRange(url.searchParams)
   const startDateStr = format(startDate, 'yyyy-MM-dd')
