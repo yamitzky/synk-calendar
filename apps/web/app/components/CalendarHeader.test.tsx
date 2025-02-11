@@ -1,10 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { CalendarHeader } from './CalendarHeader'
 
 describe('CalendarHeader', () => {
   beforeEach(() => {
-    vi.useFakeTimers()
+    vi.useFakeTimers({ shouldAdvanceTime: true })
   })
   afterEach(() => {
     vi.useRealTimers()
@@ -57,30 +58,16 @@ describe('CalendarHeader', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('May 1, 2023')
   })
 
-  it('calls onSearch when search input changes', () => {
+  it('calls onSearch when search input changes', async () => {
+    const user = userEvent.setup()
     const onSearch = vi.fn()
     render(<CalendarHeader onSearch={onSearch} />)
 
     const searchButton = screen.getByLabelText('Open Search')
-    fireEvent.click(searchButton)
-
-    const searchInput = screen.getByPlaceholderText('Search...')
-    fireEvent.change(searchInput, { target: { value: 'meeting' } })
-    fireEvent.keyDown(searchInput, { key: 'Enter' })
+    await user.click(searchButton)
+    // autofocus
+    await user.keyboard('meeting{Enter}')
 
     expect(onSearch).toHaveBeenCalledWith('meeting')
-  })
-
-  it('shows search input when user icon is clicked', () => {
-    const user = { email: 'test@example.com' }
-    render(<CalendarHeader user={user} onSearch={vi.fn()} />)
-
-    const searchInput = screen.queryByPlaceholderText('Search...')
-    expect(searchInput).toBeNull()
-
-    const userIcon = screen.getByLabelText('User avatar')
-    fireEvent.click(userIcon)
-
-    expect(screen.getByPlaceholderText('Search...')).toBeVisible()
   })
 })

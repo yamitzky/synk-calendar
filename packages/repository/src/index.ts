@@ -1,3 +1,3 @@
 export * from './console_notification'
-export * from './google_calendar'
+export * from './global_reminder_settings'
 export * from './webhook_notification'

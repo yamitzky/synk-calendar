@@ -1,4 +1,4 @@
-import type { CalendarRepository, NotificationRepository, ReminderSetting } from '@synk-cal/core'
+import type { CalendarRepository, NotificationRepository, ReminderSettingsRepository } from '@synk-cal/core'
 import { config } from '@synk-cal/core'
 import { addMinutes, isSameMinute, parseISO, subMinutes } from 'date-fns'
 import { Eta } from 'eta'
@@ -9,57 +9,78 @@ export async function processReminders(
   baseTime: Date,
   calendarRepositories: CalendarRepository[],
   notificationRepositories: Record<string, NotificationRepository>,
+  reminderSettingsRepository: ReminderSettingsRepository,
 ): Promise<void> {
-  const reminderSettings: ReminderSetting[] = config.REMINDER_SETTINGS
   const eta = new Eta()
 
-  if (!reminderSettings.length) {
-    console.warn('No reminder settings found')
-    return
-  }
-
-  const minTime = addMinutes(baseTime, Math.min(...reminderSettings.map((setting) => setting.minutesBefore)))
-  const maxTime = addMinutes(baseTime, Math.max(...reminderSettings.map((setting) => setting.minutesBefore)) + 1)
-
+  // Get all events first
+  const maxMinutesBefore = Math.max(...config.REMINDER_MINUTES_BEFORE_OPTIONS)
   const events = (
-    await Promise.all(calendarRepositories.map((calendarRepository) => calendarRepository.getEvents(minTime, maxTime)))
+    await Promise.all(
+      calendarRepositories.map((calendarRepository) =>
+        calendarRepository.getEvents(baseTime, addMinutes(baseTime, maxMinutesBefore)),
+      ),
+    )
   ).flat()
   console.debug('Fetched events', events.map((e) => `${e.title} (${e.start})`).join('\n'))
 
   const notifications: Array<{ repository: NotificationRepository; target: string; message: string }> = []
+  const reminderSettingsCache = new Map<string, Array<{ minutesBefore: number; notificationType: string }>>()
 
+  // Process each event
   for (const event of events) {
-    for (const setting of reminderSettings) {
-      const notificationRepository = notificationRepositories[setting.notificationType]
-      if (!notificationRepository) {
-        console.error(`No notification repository found for type: ${setting.notificationType}`)
-        continue
-      }
-      const reminderTime = subMinutes(parseISO(event.start), setting.minutesBefore)
-      if (!isSameMinute(reminderTime, baseTime)) {
-        console.debug(`Event "${event.title}" is not within ${setting.minutesBefore} minutes of ${baseTime}`)
+    const attendees = event.people?.filter((person) => person.email) ?? []
+    if (attendees.length === 0) {
+      continue
+    }
+
+    // Get reminder settings for each attendee
+    for (const attendee of attendees) {
+      if (!attendee.email) {
         continue
       }
 
-      const message = eta.renderString(config.REMINDER_TEMPLATE ?? DEFAULT_TEMPLATE, { ...setting, ...event })
+      // Get settings from cache or fetch new ones
+      let reminderSettings = reminderSettingsCache.get(attendee.email)
+      if (!reminderSettings) {
+        reminderSettings = await reminderSettingsRepository.getReminderSettings(attendee.email)
+        reminderSettingsCache.set(attendee.email, reminderSettings)
+      }
 
-      if (setting.target) {
-        const isAttendee = event.people?.some((person) => person.email === setting.target)
-        if (isAttendee) {
-          notifications.push({ repository: notificationRepository, target: setting.target, message })
-        } else {
-          console.debug(`Event "${event.title}" is not for ${setting.target}`)
+      if (reminderSettings.length === 0) {
+        console.debug(`No reminder settings found for ${attendee.email}`)
+        continue
+      }
+
+      // Check each reminder setting for the attendee
+      for (const setting of reminderSettings) {
+        // Skip if minutesBefore is not in the allowed options
+        if (!config.REMINDER_MINUTES_BEFORE_OPTIONS.includes(setting.minutesBefore)) {
+          console.debug(`Invalid minutesBefore value: ${setting.minutesBefore} for ${attendee.email}`)
+          continue
         }
-      } else {
-        for (const attendee of event.people || []) {
-          if (attendee.email) {
-            notifications.push({ repository: notificationRepository, target: attendee.email, message })
-          }
+
+        const notificationRepository = notificationRepositories[setting.notificationType]
+        if (!notificationRepository) {
+          console.error(`No notification repository found for type: ${setting.notificationType}`)
+          continue
         }
+
+        const reminderTime = subMinutes(parseISO(event.start), setting.minutesBefore)
+        if (!isSameMinute(reminderTime, baseTime)) {
+          console.debug(
+            `Event "${event.title}" is not within ${setting.minutesBefore} minutes of ${baseTime} for ${attendee.email}`,
+          )
+          continue
+        }
+
+        const message = eta.renderString(config.REMINDER_TEMPLATE ?? DEFAULT_TEMPLATE, { ...setting, ...event })
+        notifications.push({ repository: notificationRepository, target: attendee.email, message })
       }
     }
   }
 
+  // Send all notifications
   await Promise.all(
     notifications.map(async ({ repository, target, message }) => {
       try {

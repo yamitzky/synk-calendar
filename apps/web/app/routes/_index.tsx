@@ -1,11 +1,11 @@
 import type { MetaFunction } from '@remix-run/node'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData, useNavigate } from '@remix-run/react'
-import { type User, config } from '@synk-cal/core'
-import { extractUserFromHeader } from '@synk-cal/google-cloud'
-import { GoogleCalendarRepository } from '@synk-cal/repository'
+import { config } from '@synk-cal/core'
 import { addDays, format, parseISO, startOfWeek, subDays } from 'date-fns'
 import { Calendar } from '~/components/Calendar'
+import { getAuthRepository } from '~/services/getAuthRepository'
+import { getCalendarRepository } from '~/services/getCalendarRepository'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Synk Calendar' }, { name: 'description', content: 'Calendar viewer' }]
@@ -25,12 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const isMobile = request.headers.get('user-agent')?.includes('Mobile/') ?? false
 
-  let user: User | undefined = undefined
-  try {
-    user = await extractUserFromHeader(request.headers)
-  } catch (error) {
-    console.log(error)
-  }
+  const user = await getAuthRepository()?.getUserFromHeader(request.headers)
 
   const { startDate, endDate } = getDateRange(url.searchParams)
   const startDateStr = format(startDate, 'yyyy-MM-dd')
@@ -40,11 +35,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const minDate = subDays(startDate, 7)
   const maxDate = addDays(endDate, 7)
 
-  const repositories = config.CALENDAR_IDS.map((id) => new GoogleCalendarRepository(id))
+  const repositories = config.CALENDAR_IDS.map((id) => ({
+    id,
+    repository: getCalendarRepository(id),
+  }))
   const calendars = await Promise.all(
-    repositories.map(async (calendar) => ({
-      calendarId: calendar.calendarId,
-      events: await calendar.getEvents(minDate, maxDate),
+    repositories.map(async ({ id, repository }) => ({
+      calendarId: id,
+      events: await repository.getEvents(minDate, maxDate),
     })),
   )
   return json({

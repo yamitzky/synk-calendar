@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
-import { extractUserFromHeader } from './iap'
+import { IAPAuthRepository } from './iap'
 
-describe('extractUserFromHeader', () => {
+describe('IAPAuthRepository', () => {
   it('should return undefined when no assertion header is present', async () => {
     const headers = new Headers()
-    const user = await extractUserFromHeader(headers)
+    const user = await new IAPAuthRepository().getUserFromHeader(headers)
     expect(user).toBeUndefined()
   })
 
@@ -23,7 +23,7 @@ describe('extractUserFromHeader', () => {
       })),
     }))
 
-    const user = await extractUserFromHeader(headers)
+    const user = await new IAPAuthRepository().getUserFromHeader(headers)
     expect(user).toEqual({ email: 'test@example.com' })
   })
 })

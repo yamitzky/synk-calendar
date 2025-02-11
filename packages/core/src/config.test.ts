@@ -13,6 +13,11 @@ describe('Config', () => {
       ]),
       REMINDER_TEMPLATE: 'Your event {eventName} starts in {minutesBefore} minutes',
       WEBHOOK_URL: 'https://example.com/webhook',
+      CALENDAR_PROVIDER: 'google',
+      REMINDER_MINUTES_BEFORE_OPTIONS: '1,2,3,4,5',
+      REMINDER_SETTINGS_FIRESTORE_DATABASE_ID: 'test',
+      REMINDER_SETTINGS_PROVIDER: 'firestore',
+      AUTH_PROVIDER: 'google-iap',
     }
 
     const parsedConfig = parseConfig(mockEnv)
@@ -26,6 +31,11 @@ describe('Config', () => {
       ],
       REMINDER_TEMPLATE: 'Your event {eventName} starts in {minutesBefore} minutes',
       WEBHOOK_URL: 'https://example.com/webhook',
+      REMINDER_SETTINGS_PROVIDER: 'firestore',
+      REMINDER_SETTINGS_FIRESTORE_DATABASE_ID: 'test',
+      REMINDER_MINUTES_BEFORE_OPTIONS: [1, 2, 3, 4, 5],
+      CALENDAR_PROVIDER: 'google',
+      AUTH_PROVIDER: 'google-iap',
     })
   })
 
@@ -42,6 +52,11 @@ describe('Config', () => {
       REMINDER_SETTINGS: [],
       REMINDER_TEMPLATE: undefined,
       WEBHOOK_URL: undefined,
+      REMINDER_SETTINGS_PROVIDER: 'global',
+      REMINDER_SETTINGS_FIRESTORE_DATABASE_ID: undefined,
+      REMINDER_MINUTES_BEFORE_OPTIONS: [5, 10, 15, 30, 60, 120, 180, 360, 720, 1440],
+      AUTH_PROVIDER: undefined,
+      CALENDAR_PROVIDER: 'google',
     })
   })
 

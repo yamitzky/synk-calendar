@@ -35,10 +35,16 @@ async function validateAssertion(assertion: string | null) {
   }
 }
 
-export async function extractUserFromHeader(headers: Headers): Promise<User | undefined> {
-  const assertion = headers.get('x-goog-iap-jwt-assertion')
-  const info = await validateAssertion(assertion)
-  if (info.email) {
-    return { email: info.email }
+export class IAPAuthRepository {
+  async getUserFromHeader(headers: Headers): Promise<User | undefined> {
+    try {
+      const assertion = headers.get('x-goog-iap-jwt-assertion')
+      const info = await validateAssertion(assertion)
+      if (info.email) {
+        return { email: info.email }
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

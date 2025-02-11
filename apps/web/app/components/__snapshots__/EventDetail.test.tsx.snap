@@ -5,7 +5,7 @@ exports[`EventDetail > aaaa 1`] = `"asasfa"`;
 exports[`EventDetail > renders correctly with all props 1`] = `
 <div>
   <div
-    class="space-y-2"
+    class="space-y-2 [&_a]:text-teal-500 [&_a]:underline [&_a]:transition [&_a:hover]:opacity-80"
   >
     <p
       class="font-bold text-lg"
@@ -48,7 +48,7 @@ exports[`EventDetail > renders correctly with all props 1`] = `
 exports[`EventDetail > renders correctly with minimal props 1`] = `
 <div>
   <div
-    class="space-y-2"
+    class="space-y-2 [&_a]:text-teal-500 [&_a]:underline [&_a]:transition [&_a:hover]:opacity-80"
   >
     <p
       class="font-bold text-lg"
@@ -65,7 +65,7 @@ exports[`EventDetail > renders correctly with minimal props 1`] = `
 exports[`EventDetail > renders location as a link when it is a URL 1`] = `
 <div>
   <div
-    class="space-y-2"
+    class="space-y-2 [&_a]:text-teal-500 [&_a]:underline [&_a]:transition [&_a:hover]:opacity-80"
   >
     <p
       class="font-bold text-lg"

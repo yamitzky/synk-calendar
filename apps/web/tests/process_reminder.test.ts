@@ -10,6 +10,8 @@ vi.mock('@synk-cal/core', () => ({
   config: {
     CALENDAR_IDS: ['test_calendar_id'],
     WEBHOOK_URL: 'https://test-webhook.com',
+    CALENDAR_PROVIDER: 'google',
+    REMINDER_SETTINGS_PROVIDER: 'firestore',
   },
 }))
 
@@ -49,6 +51,7 @@ describe('process_reminder action', () => {
         console: expect.any(Object),
         webhook: expect.any(Object),
       }),
+      expect.any(Object),
     )
   })
 
@@ -73,6 +76,7 @@ describe('process_reminder action', () => {
         console: expect.any(Object),
         webhook: expect.any(Object),
       }),
+      expect.any(Object),
     )
   })
 

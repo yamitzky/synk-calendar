@@ -1,11 +1,10 @@
 import { Avatar } from '@nextui-org/react'
 import type { User } from '@synk-cal/core'
 import { useEffect, useState } from 'react'
-import { twMerge } from 'tailwind-merge'
 
 type Props = {
+  as?: 'button'
   user: User
-  onClick?: () => void
   className?: string
 }
 
@@ -18,11 +17,12 @@ async function generateSHA256Hash(message: string) {
   return hashHex
 }
 
-export function UserInfo({ user, onClick, className }: Props) {
+export function UserInfo({ as, user, className, ...props }: Props) {
   let name = user.name
   if (!name) {
     name = user.email.split('@')[0]
   }
+
   const [imageURL, setImageURL] = useState('')
   useEffect(() => {
     ;(async () => {
@@ -31,14 +31,8 @@ export function UserInfo({ user, onClick, className }: Props) {
       setImageURL(gravatarURL)
     })()
   }, [user.email])
+
   return (
-    <Avatar
-      name={name}
-      aria-label="User avatar"
-      src={imageURL}
-      showFallback
-      className={twMerge(className, onClick ? 'cursor-pointer' : '')}
-      onClick={onClick}
-    />
+    <Avatar as={as} name={name} aria-label="User avatar" src={imageURL} className={className} showFallback {...props} />
   )
 }
