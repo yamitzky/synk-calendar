@@ -6,5 +6,8 @@
     "requireBranch": "main",
     "commitMessage": "chore: release ${version}",
     "tagName": "v${version}"
+  },
+  "hooks": {
+    "after:bump": "pnpm run build"
   }
 }
