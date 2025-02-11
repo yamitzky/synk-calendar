@@ -1,5 +1,5 @@
 {
-  "name": "@synk-cal/google-cloud",
+  "name": "@synk-cal/google",
   "type": "module",
   "version": "1.0.6",
   "main": "src/index.ts",
@@ -10,10 +10,11 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@synk-cal/core": "workspace:*",
     "@google-cloud/firestore": "^7.1.0",
+    "@synk-cal/core": "workspace:*",
     "gcp-metadata": "^6.0.0",
-    "google-auth-library": "^9.4.1"
+    "google-auth-library": "^9.4.1",
+    "googleapis": "^144.0.0"
   },
   "devDependencies": {
     "eslint": "^8.38.0",

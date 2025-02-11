@@ -1,8 +1,9 @@
 import type { NotificationRepository } from '@synk-cal/core'
 import { config } from '@synk-cal/core'
+import { GoogleCalendarRepository } from '@synk-cal/google'
 import {
   ConsoleNotificationRepository,
-  GoogleCalendarRepository,
+  GlobalReminderSettingsRepository,
   WebhookNotificationRepository,
 } from '@synk-cal/repository'
 import { processReminders } from '@synk-cal/usecase'
@@ -29,6 +30,7 @@ async function main() {
 
   const baseTime = parseISO(baseTimeArg)
 
+  const reminderSettingsRepository = new GlobalReminderSettingsRepository()
   const calendarRepositories = config.CALENDAR_IDS.map((id) => new GoogleCalendarRepository(id))
   const notificationRepositories: Record<string, NotificationRepository> = {
     console: new ConsoleNotificationRepository(),
@@ -36,7 +38,7 @@ async function main() {
   if (config.WEBHOOK_URL) {
     notificationRepositories.webhook = new WebhookNotificationRepository(config.WEBHOOK_URL)
   }
-  await processReminders(baseTime, calendarRepositories, notificationRepositories)
+  await processReminders(baseTime, calendarRepositories, notificationRepositories, reminderSettingsRepository)
 }
 
 main().catch((error) => {

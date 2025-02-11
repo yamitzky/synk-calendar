@@ -12,7 +12,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   let reminders: ReminderSetting[] = []
   if (user) {
-    reminders = (await reminderSettingsRepo?.getReminderSettings(user.email)) || []
+    reminders = (await reminderSettingsRepo.getReminderSettings(user.email)) || []
   }
 
   return json({
@@ -32,13 +32,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const remindersJson = formData.get('reminders')
+  let reminders = []
   if (typeof remindersJson === 'string') {
     try {
-      const reminders = JSON.parse(remindersJson)
-      await getReminderSettingsRepository()?.updateReminderSettings(user.email, reminders)
-      return json({ success: true, reminders })
+      reminders = JSON.parse(remindersJson)
     } catch (error) {
       return json({ success: false, error: 'Invalid JSON format' }, { status: 400 })
+    }
+    try {
+      await getReminderSettingsRepository().updateReminderSettings(user.email, reminders)
+      return json({ success: true, reminders })
+    } catch (error) {
+      console.error('Error updating reminders:', error)
+      return json({ success: false, error: 'Failed to update reminders' }, { status: 500 })
     }
   }
 

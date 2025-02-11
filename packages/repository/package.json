@@ -9,8 +9,7 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
-    "@synk-cal/core": "workspace:*",
-    "googleapis": "^144.0.0"
+    "@synk-cal/core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.1.6",

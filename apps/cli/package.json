@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@synk-cal/core": "workspace:*",
+    "@synk-cal/google": "workspace:*",
     "@synk-cal/repository": "workspace:*",
     "@synk-cal/usecase": "workspace:*",
     "date-fns": "^4.1.0"

@@ -1,3 +1,4 @@
+import { ReminderSetting } from '@synk-cal/core'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -17,9 +18,9 @@ describe('ReminderSettings', () => {
 
   it('displays existing reminders', () => {
     const reminders = [
-      { id: '1', minutes: 5, type: 'webhook' },
-      { id: '2', minutes: 30, type: 'webhook' },
-    ] as const
+      { id: '1', minutesBefore: 5, notificationType: 'webhook' },
+      { id: '2', minutesBefore: 30, notificationType: 'webhook' },
+    ] satisfies ReminderSetting[]
     render(<ReminderSettings user={userInfo} reminders={reminders} onChange={vi.fn()} />)
 
     expect(screen.getByRole('button', { name: '5 min Notify before' }))
@@ -36,9 +37,9 @@ describe('ReminderSettings', () => {
     expect(onChange).toHaveBeenCalledTimes(1)
     expect(onChange).toHaveBeenCalledWith([
       expect.objectContaining({
-        minutes: 5,
-        type: 'webhook',
-      }),
+        minutesBefore: 5,
+        notificationType: 'webhook',
+      } satisfies ReminderSetting),
     ])
   })
 
@@ -46,9 +47,9 @@ describe('ReminderSettings', () => {
     const user = userEvent.setup()
 
     const reminders = [
-      { id: '1', minutes: 5, type: 'webhook' },
-      { id: '2', minutes: 30, type: 'webhook' },
-    ] as const
+      { id: '1', minutesBefore: 5, notificationType: 'webhook' },
+      { id: '2', minutesBefore: 30, notificationType: 'webhook' },
+    ] satisfies ReminderSetting[]
     const onChange = vi.fn()
     render(<ReminderSettings user={userInfo} reminders={reminders} onChange={onChange} />)
 
@@ -62,7 +63,7 @@ describe('ReminderSettings', () => {
 
   it('calls onChange when updating reminder minutes', async () => {
     const user = userEvent.setup()
-    const reminders = [{ id: '1', minutes: 5, type: 'webhook' }] as const
+    const reminders = [{ id: '1', minutesBefore: 5, notificationType: 'webhook' }] satisfies ReminderSetting[]
     const onChange = vi.fn()
     render(<ReminderSettings user={userInfo} reminders={reminders} onChange={onChange} />)
 
@@ -74,9 +75,9 @@ describe('ReminderSettings', () => {
     expect(onChange).toHaveBeenCalledWith([
       expect.objectContaining({
         id: '1',
-        minutes: 10,
-        type: 'webhook',
-      }),
+        minutesBefore: 10,
+        notificationType: 'webhook',
+      } satisfies ReminderSetting),
     ])
   })
 })

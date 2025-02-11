@@ -1,5 +1,5 @@
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
-import type { ReminderSetting, User } from '@synk-cal/core'
+import { type ReminderSetting, type User, config } from '@synk-cal/core'
 import { UserInfo } from '~/components/UserInfo'
 
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
@@ -13,21 +13,15 @@ type Props = {
   className?: string
 }
 
-const NOTIFY_BEFORE_OPTIONS = [
-  { value: 5, unit: 'min', amount: 5 },
-  { value: 10, unit: 'min', amount: 10 },
-  { value: 15, unit: 'min', amount: 15 },
-  { value: 30, unit: 'min', amount: 30 },
-  { value: 60, unit: 'hour', amount: 1 },
-  { value: 120, unit: 'hour', amount: 2 },
-  { value: 180, unit: 'hour', amount: 3 },
-  { value: 360, unit: 'hour', amount: 6 },
-  { value: 720, unit: 'hour', amount: 12 },
-  { value: 1440, unit: 'day', amount: 1 },
-  { value: 2880, unit: 'day', amount: 2 },
-  { value: 4320, unit: 'day', amount: 3 },
-  { value: 10080, unit: 'day', amount: 7 },
-] as const
+const NOTIFY_BEFORE_OPTIONS = config.REMINDER_MINUTES_BEFORE_OPTIONS.map((value) => {
+  if (value < 60) {
+    return { value, unit: 'min' as const, amount: value }
+  } else if (value < 1440) {
+    return { value, unit: 'hour' as const, amount: value / 60 }
+  } else {
+    return { value, unit: 'day' as const, amount: value / 1440 }
+  }
+})
 
 const unitInJapanese = {
   min: '分',
@@ -101,7 +95,10 @@ export function ReminderSettings({ user, reminders, onChange, className }: Props
                 </Select>
                 <Input
                   label={locale === 'ja' ? '通知タイプ' : 'Notification type'}
-                  value="Webhook"
+                  onChange={() => {
+                    throw new Error('Not implemented')
+                  }}
+                  value={reminder.notificationType}
                   isReadOnly
                   className="max-w-[200px]"
                 />
