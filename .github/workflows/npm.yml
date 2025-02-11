@@ -1,9 +1,15 @@
-name: Publish Package to npmjs
+name: Release
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read # for checkout
+
 jobs:
-  build:
+  release:
+    name: Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -38,7 +44,7 @@ jobs:
         run: pnpm audit signatures
 
       - name: Publish to npm
-        run: pnpm run release
+        run: pnpx semantic-release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
