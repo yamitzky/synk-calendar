@@ -7,7 +7,11 @@
   "bin": {
     "synk-cal": "./bin/server.js"
   },
-  "files": ["bin", "public", "build"],
+  "files": [
+    "bin",
+    "public",
+    "build"
+  ],
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
@@ -26,6 +30,7 @@
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "@google-cloud/firestore": "^7.1.0",
     "@nextui-org/react": "^2.4.8",
     "@remix-run/express": "^2.15.3",
     "@remix-run/node": "^2.15.3",
