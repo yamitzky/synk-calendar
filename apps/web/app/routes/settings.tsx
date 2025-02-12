@@ -1,9 +1,11 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useFetcher, useLoaderData } from '@remix-run/react'
-import { ReminderSetting } from '@synk-cal/core'
+import { ReminderSetting, config } from '@synk-cal/core'
 import { ReminderSettings } from '~/components/Settings'
 import { getAuthRepository } from '~/services/getAuthRepository'
 import { getReminderSettingsRepository } from '~/services/getReminderSettingsRepository'
+
+const NOTIFY_BEFORE_OPTIONS = config.REMINDER_MINUTES_BEFORE_OPTIONS
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getAuthRepository()?.getUserFromHeader(request.headers)
@@ -19,6 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     user,
     isReminderSettingsEnabled: !!reminderSettingsRepo,
     reminders,
+    notifyBeforeOptions: NOTIFY_BEFORE_OPTIONS,
   })
 }
 
@@ -52,7 +55,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function SettingsRoute() {
-  const { user, reminders, isReminderSettingsEnabled } = useLoaderData<typeof loader>()
+  const { user, reminders, isReminderSettingsEnabled, notifyBeforeOptions } = useLoaderData<typeof loader>()
   const fetcher = useFetcher()
 
   const handleRemindersChange = (newReminders: ReminderSetting[]) => {
@@ -72,7 +75,12 @@ export default function SettingsRoute() {
       ) : !isReminderSettingsEnabled ? (
         <div>Reminder settings are not enabled.</div>
       ) : (
-        <ReminderSettings user={user} reminders={currentReminders} onChange={handleRemindersChange} />
+        <ReminderSettings
+          user={user}
+          reminders={currentReminders}
+          notifyBeforeOptions={notifyBeforeOptions}
+          onChange={handleRemindersChange}
+        />
       )}
     </div>
   )

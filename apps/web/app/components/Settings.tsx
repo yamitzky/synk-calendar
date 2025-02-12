@@ -1,5 +1,5 @@
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
-import { type ReminderSetting, type User, config } from '@synk-cal/core'
+import { type ReminderSetting, type User } from '@synk-cal/core'
 import { UserInfo } from '~/components/UserInfo'
 
 import { Button, Input, Select, SelectItem } from '@nextui-org/react'
@@ -10,18 +10,9 @@ type Props = {
   user: User
   reminders: readonly ReminderSetting[]
   onChange: (reminders: ReminderSetting[]) => void
+  notifyBeforeOptions?: number[]
   className?: string
 }
-
-const NOTIFY_BEFORE_OPTIONS = config.REMINDER_MINUTES_BEFORE_OPTIONS.map((value) => {
-  if (value < 60) {
-    return { value, unit: 'min' as const, amount: value }
-  } else if (value < 1440) {
-    return { value, unit: 'hour' as const, amount: value / 60 }
-  } else {
-    return { value, unit: 'day' as const, amount: value / 1440 }
-  }
-})
 
 const unitInJapanese = {
   min: '分',
@@ -29,7 +20,13 @@ const unitInJapanese = {
   day: '日',
 } as const
 
-export function ReminderSettings({ user, reminders, onChange, className }: Props) {
+export function ReminderSettings({
+  user,
+  reminders,
+  onChange,
+  notifyBeforeOptions = [5, 10, 15, 30, 60, 120, 180, 360, 720, 1440],
+  className,
+}: Props) {
   const addReminder = () => {
     const newReminder: ReminderSetting = {
       id: crypto.randomUUID(),
@@ -82,7 +79,15 @@ export function ReminderSettings({ user, reminders, onChange, className }: Props
                   selectedKeys={[reminder.minutesBefore.toString()]}
                   className="max-w-[200px]"
                   onChange={(e) => updateReminder(reminder.id ?? i, Number(e.target.value))}
-                  items={NOTIFY_BEFORE_OPTIONS}
+                  items={notifyBeforeOptions.map((value) => {
+                    if (value < 60) {
+                      return { value, unit: 'min' as const, amount: value }
+                    } else if (value < 1440) {
+                      return { value, unit: 'hour' as const, amount: value / 60 }
+                    } else {
+                      return { value, unit: 'day' as const, amount: value / 1440 }
+                    }
+                  })}
                 >
                   {({ unit, amount, value }) => {
                     const label = `${amount} ${locale === 'ja' ? unitInJapanese[unit] : unit}`
