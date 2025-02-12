@@ -24,8 +24,8 @@ describe('UserInfo', () => {
     const user = {
       email: 'test@example.com',
     }
-    const { container } = render(<UserInfoMenu user={user} className="custom-class" />)
-    expect(container.firstChild).toHaveClass('custom-class')
+    render(<UserInfoMenu user={user} className="custom-class" />)
+    expect(screen.getByRole('button')).toHaveClass('custom-class')
   })
 
   it('should set correct Gravatar URL based on email hash', async () => {

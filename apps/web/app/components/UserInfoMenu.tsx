@@ -15,7 +15,9 @@ export function UserInfoMenu({ user, onClickShowMyEvents, className }: Props) {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <UserInfo user={user} className={className} as="button" />
+        <div>
+          <UserInfo user={user} className={className} as="button" />
+        </div>
       </DropdownTrigger>
       <DropdownMenu aria-label="User actions">
         <DropdownItem key="setting" href="/settings">
