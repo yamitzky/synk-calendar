@@ -3,7 +3,6 @@
     "release-it-pnpm": {}
   },
   "git": {
-    "requireBranch": "main",
     "commitMessage": "chore: release ${version}",
     "tagName": "v${version}"
   },
