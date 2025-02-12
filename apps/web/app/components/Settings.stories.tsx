@@ -24,8 +24,8 @@ export const Default: Story = {
       name: 'Test User',
     },
     reminders: [
-      { id: '1', minutes: 5, type: 'webhook' },
-      { id: '2', minutes: 30, type: 'webhook' },
+      { id: '1', minutesBefore: 5, notificationType: 'webhook' },
+      { id: '2', minutesBefore: 30, notificationType: 'webhook' },
     ],
   },
 }
