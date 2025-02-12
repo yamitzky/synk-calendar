@@ -15,9 +15,9 @@ type Props = {
 }
 
 const unitInJapanese = {
-  min: '分',
-  hour: '時間',
-  day: '日',
+  min: '分前',
+  hour: '時間前',
+  day: '日前',
 } as const
 
 export function ReminderSettings({
