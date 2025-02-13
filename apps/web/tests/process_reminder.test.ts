@@ -44,15 +44,16 @@ describe('process_reminder action', () => {
     expect(response.status).toBe(200)
     expect(await response.json()).toEqual({ success: true })
 
-    expect(processReminders).toHaveBeenCalledWith(
-      expect.any(Date),
-      expect.arrayContaining([expect.any(Object)]),
-      expect.objectContaining({
+    expect(processReminders).toHaveBeenCalledWith({
+      baseTime: expect.any(Date),
+      calendarRepositories: expect.arrayContaining([expect.any(Object)]),
+      groupRepository: undefined,
+      notificationRepositories: expect.objectContaining({
         console: expect.any(Object),
         webhook: expect.any(Object),
       }),
-      expect.any(Object),
-    )
+      reminderSettingsRepository: expect.any(Object),
+    })
   })
 
   it('should process reminders with baseTime in request body', async () => {
@@ -68,16 +69,16 @@ describe('process_reminder action', () => {
     const response = (await action({ request, params: {}, context: {} })) as Response
     expect(response.status).toBe(200)
     expect(await response.json()).toEqual({ success: true })
-
-    expect(processReminders).toHaveBeenCalledWith(
-      expect.any(Date),
-      expect.arrayContaining([expect.any(Object)]),
-      expect.objectContaining({
+    expect(processReminders).toHaveBeenCalledWith({
+      baseTime: expect.any(Date),
+      calendarRepositories: expect.arrayContaining([expect.any(Object)]),
+      groupRepository: undefined,
+      notificationRepositories: expect.objectContaining({
         console: expect.any(Object),
         webhook: expect.any(Object),
       }),
-      expect.any(Object),
-    )
+      reminderSettingsRepository: expect.any(Object),
+    })
   })
 
   it('should return 400 for invalid baseTime', async () => {
