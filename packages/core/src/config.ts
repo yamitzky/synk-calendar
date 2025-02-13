@@ -21,6 +21,10 @@ export const ConfigSchema = v.object({
     v.optional(v.string()),
     v.transform((value) => value?.split(',') ?? []),
   ),
+  PRIVATE_CALENDAR_IDS: v.pipe(
+    v.optional(v.string()),
+    v.transform((value) => value?.split(',') ?? []),
+  ),
   TIMEZONE: v.optional(v.string(), 'UTC'),
   REMINDER_SETTINGS: v.pipe(
     v.optional(v.string()),
@@ -52,6 +56,7 @@ export function parseConfig(env: NodeJS.ProcessEnv): Config {
     GOOGLE_AUTH_SUBJECT: env.GOOGLE_AUTH_SUBJECT,
     CALENDAR_PROVIDER: env.CALENDAR_PROVIDER,
     CALENDAR_IDS: env.CALENDAR_IDS,
+    PRIVATE_CALENDAR_IDS: env.PRIVATE_CALENDAR_IDS,
     REMINDER_SETTINGS: env.REMINDER_SETTINGS,
     REMINDER_SETTINGS_PROVIDER: env.REMINDER_SETTINGS_PROVIDER,
     REMINDER_SETTINGS_FIRESTORE_DATABASE_ID: env.REMINDER_SETTINGS_FIRESTORE_DATABASE_ID,

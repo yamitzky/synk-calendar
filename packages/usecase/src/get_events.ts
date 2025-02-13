@@ -3,6 +3,7 @@ import { type CalendarEvent, type CalendarRepository, Group, GroupMember, type G
 interface GetEventsUseCaseParams {
   calendarRepository: CalendarRepository
   groupRepository?: GroupRepository
+  attendeeEmail?: string
   minDate: Date
   maxDate: Date
 }
@@ -10,12 +11,13 @@ interface GetEventsUseCaseParams {
 export const getEvents = async ({
   calendarRepository,
   groupRepository,
+  attendeeEmail,
   minDate,
   maxDate,
 }: GetEventsUseCaseParams): Promise<CalendarEvent[]> => {
   const events = await calendarRepository.getEvents(minDate, maxDate)
 
-  const expandedEvents: CalendarEvent[] = []
+  let expandedEvents: CalendarEvent[] = []
 
   const groupCache: Record<string, { group: Group; members?: GroupMember[] }> = {}
   if (groupRepository) {
@@ -23,7 +25,6 @@ export const getEvents = async ({
     for (const group of groups) {
       // members are fetched lazily
       groupCache[group.email] = { group }
-      console.log(group.email)
     }
   }
 
@@ -61,6 +62,10 @@ export const getEvents = async ({
       ...event,
       people: expandedAttendees,
     })
+  }
+
+  if (attendeeEmail) {
+    expandedEvents = expandedEvents.filter((e) => e.people.some((p) => p.email === attendeeEmail))
   }
 
   return expandedEvents
