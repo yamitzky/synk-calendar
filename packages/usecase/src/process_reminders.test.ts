@@ -6,6 +6,7 @@ import { processReminders } from './process_reminders'
 vi.mock('@synk-cal/core', () => ({
   config: {
     REMINDER_TEMPLATE: 'Custom reminder: <%= it.title %> <%= it.minutesBefore ? `in ${it.minutesBefore} minutes` : `tomorrow at ${String(it.hour).padStart(2, "0")}:${String(it.minute).padStart(2, "0")}` %>.',
+    TIMEZONE: 'UTC',
   },
 }))
 
@@ -116,7 +117,7 @@ describe('processReminders', () => {
   })
 
   it('should send notifications for day before at specific hour', async () => {
-    const baseTime = parseISO('2023-06-01T10:00:00Z') // 19:00 JST
+    const baseTime = parseISO('2023-06-01T19:00:00Z') // UTC 19:00
     const eventStart = parseISO('2023-06-02T10:00:00Z')
 
     vi.mocked(mockCalendarRepository.getEvents).mockResolvedValue([
@@ -153,14 +154,14 @@ describe('processReminders', () => {
   })
 
   it('should handle multiple attendees for the same event', async () => {
-    const baseTime = parseISO('2023-06-01T10:00:00Z')
-    const eventStart = parseISO('2023-06-01T10:10:00Z')
+    const baseTime = parseISO('2023-06-01T19:00:00Z')
+    const eventStart = parseISO('2023-06-02T10:10:00Z')
 
     vi.mocked(mockCalendarRepository.getEvents).mockResolvedValue([
       {
         id: '1',
         start: eventStart.toISOString(),
-        end: parseISO('2023-06-01T11:10:00Z').toISOString(),
+        end: parseISO('2023-06-02T11:10:00Z').toISOString(),
         title: 'Event 1',
         people: [
           { email: 'user1@example.com', organizer: false },
@@ -200,15 +201,23 @@ describe('processReminders', () => {
   })
 
   it('should handle multiple reminder settings for the same user', async () => {
-    const baseTime = parseISO('2023-06-01T10:00:00Z')
-    const eventStart = parseISO('2023-06-01T10:10:00Z')
+    const baseTime = parseISO('2023-06-01T19:00:00Z')
+    const event1Start = parseISO('2023-06-01T19:10:00Z') // For minutesBefore
+    const event2Start = parseISO('2023-06-02T10:10:00Z') // For hour/minute
 
     vi.mocked(mockCalendarRepository.getEvents).mockResolvedValue([
       {
         id: '1',
-        start: eventStart.toISOString(),
-        end: parseISO('2023-06-01T11:10:00Z').toISOString(),
+        start: event1Start.toISOString(),
+        end: parseISO('2023-06-01T20:10:00Z').toISOString(),
         title: 'Event 1',
+        people: [{ email: 'user1@example.com', organizer: false }],
+      },
+      {
+        id: '2',
+        start: event2Start.toISOString(),
+        end: parseISO('2023-06-02T11:10:00Z').toISOString(),
+        title: 'Event 2',
         people: [{ email: 'user1@example.com', organizer: false }],
       },
     ])
@@ -241,7 +250,7 @@ describe('processReminders', () => {
 
     expect(mockWebhookNotificationRepository.notify).toHaveBeenCalledWith(
       'user1@example.com',
-      'Custom reminder: Event 1 tomorrow at 19:00.',
+      'Custom reminder: Event 2 tomorrow at 19:00.',
     )
   })
 

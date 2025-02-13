@@ -1,11 +1,12 @@
 import type {
   CalendarRepository,
   NotificationRepository,
+  ReminderSetting,
   ReminderSettingsRepository,
-  ReminderTiming,
 } from '@synk-cal/core'
 import { config } from '@synk-cal/core'
-import { addDays, isSameHour, isSameMinute, parseISO, setHours, setMinutes, subMinutes } from 'date-fns'
+import { addDays, isSameMinute, parseISO, subMinutes } from 'date-fns'
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
 import { Eta } from 'eta'
 
 const DEFAULT_TEMPLATE = `Reminder: "<%= it.title %>" starts <%= 
@@ -14,11 +15,18 @@ const DEFAULT_TEMPLATE = `Reminder: "<%= it.title %>" starts <%=
     : \`tomorrow at \${String(it.hour).padStart(2, '0')}:\${String(it.minute).padStart(2, '0')}\` 
 %>.`
 
-const getReminderTime = (eventStart: Date, setting: ReminderTiming) => {
+const getReminderTime = (eventStart: Date, setting: ReminderSetting) => {
+  const timezone = config.TIMEZONE
+
   if ('minutesBefore' in setting) {
     return subMinutes(eventStart, setting.minutesBefore)
   } else {
-    return setMinutes(setHours(addDays(eventStart, -1), setting.hour), setting.minute)
+    // Get the date of the day before the event
+    const reminderDateStr = formatInTimeZone(addDays(eventStart, -1), timezone, 'yyyy-MM-dd')
+    // Set the specified time
+    const reminderTimeStr = `${reminderDateStr}T${String(setting.hour).padStart(2, '0')}:${String(setting.minute).padStart(2, '0')}:00`
+    // Convert to UTC considering timezone
+    return fromZonedTime(reminderTimeStr, timezone)
   }
 }
 
@@ -39,7 +47,7 @@ export async function processReminders(
   console.debug('Fetched events', events.map((e) => `${e.title} (${e.start})`).join('\n'))
 
   const notifications: Array<{ repository: NotificationRepository; target: string; message: string }> = []
-  const reminderSettingsCache = new Map<string, Array<ReminderTiming & { notificationType: string }>>()
+  const reminderSettingsCache = new Map<string, ReminderSetting[]>()
 
   // Process each event
   for (const event of events) {
@@ -75,11 +83,7 @@ export async function processReminders(
         }
 
         const reminderTime = getReminderTime(parseISO(event.start), setting)
-        const isTimeMatch =
-          'minutesBefore' in setting
-            ? isSameMinute(reminderTime, baseTime)
-            : isSameHour(baseTime, setHours(baseTime, setting.hour)) &&
-              isSameMinute(baseTime, setMinutes(setHours(baseTime, setting.hour), setting.minute))
+        const isTimeMatch = isSameMinute(reminderTime, baseTime)
         if (!isTimeMatch) {
           console.debug(
             `Event "${event.title}" reminder time ${reminderTime} does not match current time ${baseTime} for ${attendee.email}`,

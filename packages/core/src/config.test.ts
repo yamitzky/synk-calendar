@@ -25,6 +25,7 @@ describe('Config', () => {
     expect(parsedConfig).toEqual({
       GOOGLE_AUTH_SUBJECT: 'test@example.com',
       CALENDAR_IDS: ['calendar1', 'calendar2'],
+      TIMEZONE: 'UTC',
       REMINDER_SETTINGS: [
         { minutesBefore: 10, notificationType: 'email' },
         { hour: 9, minute: 0, notificationType: 'sms', target: '+1234567890' },
@@ -49,6 +50,7 @@ describe('Config', () => {
     expect(parsedConfig).toEqual({
       GOOGLE_AUTH_SUBJECT: undefined,
       CALENDAR_IDS: ['calendar1'],
+      TIMEZONE: 'UTC',
       REMINDER_SETTINGS: [],
       REMINDER_TEMPLATE: undefined,
       WEBHOOK_URL: undefined,

@@ -7,11 +7,7 @@
   "bin": {
     "synk-cal": "./bin/server.js"
   },
-  "files": [
-    "bin",
-    "public",
-    "build"
-  ],
+  "files": ["bin", "public", "build"],
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",

@@ -21,6 +21,7 @@ export const ConfigSchema = v.object({
     v.optional(v.string()),
     v.transform((value) => value?.split(',') ?? []),
   ),
+  TIMEZONE: v.optional(v.string(), 'UTC'),
   REMINDER_SETTINGS: v.pipe(
     v.optional(v.string()),
     v.transform((value) => {
