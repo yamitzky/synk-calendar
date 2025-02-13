@@ -9,6 +9,7 @@ describe('Config', () => {
       GOOGLE_AUTH_SUBJECT: 'test@example.com',
       CALENDAR_IDS: 'calendar1,calendar2',
       PRIVATE_CALENDAR_IDS: 'calendar3,calendar4',
+      TIMEZONE: 'Asia/Tokyo',
       REMINDER_SETTINGS: JSON.stringify([
         { minutesBefore: 10, notificationType: 'email' },
         { hour: 9, minute: 0, notificationType: 'sms', target: '+1234567890' },
@@ -27,7 +28,7 @@ describe('Config', () => {
       GOOGLE_AUTH_SUBJECT: 'test@example.com',
       CALENDAR_IDS: ['calendar1', 'calendar2'],
       PRIVATE_CALENDAR_IDS: ['calendar3', 'calendar4'],
-      TIMEZONE: 'UTC',
+      TIMEZONE: 'Asia/Tokyo',
       REMINDER_SETTINGS: [
         { minutesBefore: 10, notificationType: 'email' },
         { hour: 9, minute: 0, notificationType: 'sms', target: '+1234567890' },

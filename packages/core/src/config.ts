@@ -63,6 +63,7 @@ export function parseConfig(env: NodeJS.ProcessEnv): Config {
     REMINDER_TEMPLATE: env.REMINDER_TEMPLATE,
     AUTH_PROVIDER: env.AUTH_PROVIDER,
     WEBHOOK_URL: env.WEBHOOK_URL,
+    TIMEZONE: env.TIMEZONE,
     GROUP_PROVIDER: env.GROUP_PROVIDER,
     GROUP_CUSTOMER_ID: env.GROUP_CUSTOMER_ID,
   })
