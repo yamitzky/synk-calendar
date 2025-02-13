@@ -3,6 +3,7 @@ import { json } from '@remix-run/node'
 import { config } from '@synk-cal/core'
 import { processReminders } from '@synk-cal/usecase'
 import { getCalendarRepository } from '~/services/getCalendarRepository'
+import { getGroupRepository } from '~/services/getGroupRepository'
 import { getNotificationRepositories } from '~/services/getNotificationRepository'
 import { getReminderSettingsRepository } from '~/services/getReminderSettingsRepository'
 
@@ -30,11 +31,18 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   const calendarRepositories = config.CALENDAR_IDS.map((id) => getCalendarRepository(id))
+  const groupRepository = getGroupRepository()
   const notificationRepositories = getNotificationRepositories()
   const reminderSettingsRepository = getReminderSettingsRepository()
 
   try {
-    await processReminders(baseTime, calendarRepositories, notificationRepositories, reminderSettingsRepository)
+    await processReminders({
+      baseTime,
+      groupRepository,
+      calendarRepositories,
+      notificationRepositories,
+      reminderSettingsRepository,
+    })
     return json({ success: true })
   } catch (error) {
     console.error('Error processing reminders:', error)

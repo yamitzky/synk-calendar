@@ -1,5 +1,6 @@
 import type {
   CalendarRepository,
+  GroupRepository,
   NotificationRepository,
   ReminderSetting,
   ReminderSettingsRepository,
@@ -8,6 +9,7 @@ import { config } from '@synk-cal/core'
 import { addDays, isSameMinute, parseISO, subMinutes } from 'date-fns'
 import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
 import { Eta } from 'eta'
+import { getEvents } from './get_events'
 
 const DEFAULT_TEMPLATE = `Reminder: "<%= it.title %>" starts <%= 
   it.minutesBefore !== undefined 
@@ -30,18 +32,30 @@ const getReminderTime = (eventStart: Date, setting: ReminderSetting) => {
   }
 }
 
-export async function processReminders(
-  baseTime: Date,
-  calendarRepositories: CalendarRepository[],
-  notificationRepositories: Record<string, NotificationRepository>,
-  reminderSettingsRepository: ReminderSettingsRepository,
-): Promise<void> {
+type ProcessReminderParams = {
+  baseTime: Date
+  calendarRepositories: CalendarRepository[]
+  groupRepository?: GroupRepository
+  notificationRepositories: Record<string, NotificationRepository>
+  reminderSettingsRepository: ReminderSettingsRepository
+}
+
+export async function processReminders({
+  baseTime,
+  calendarRepositories,
+  groupRepository,
+  notificationRepositories,
+  reminderSettingsRepository,
+}: ProcessReminderParams): Promise<void> {
   const eta = new Eta()
 
   // Get all events first
   const events = (
     await Promise.all(
-      calendarRepositories.map((calendarRepository) => calendarRepository.getEvents(baseTime, addDays(baseTime, 1))),
+      calendarRepositories.map((calendarRepository) =>
+        // FIXME: consider reminder settings
+        getEvents({ calendarRepository, groupRepository, minDate: baseTime, maxDate: addDays(baseTime, 1) }),
+      ),
     )
   ).flat()
   console.debug('Fetched events', events.map((e) => `${e.title} (${e.start})`).join('\n'))
