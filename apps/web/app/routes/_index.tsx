@@ -7,7 +7,7 @@ import { addDays, format, parseISO, startOfWeek, subDays } from 'date-fns'
 import { Calendar } from '~/components/Calendar'
 import { getAuthRepository } from '~/services/getAuthRepository'
 import { getCalendarRepository } from '~/services/getCalendarRepository'
-import { getGroupRepository } from '~/services/getGRoupRepository'
+import { getGroupRepository } from '~/services/getGroupRepository'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Synk Calendar' }, { name: 'description', content: 'Calendar viewer' }]

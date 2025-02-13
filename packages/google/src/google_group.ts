@@ -4,6 +4,10 @@ import { type cloudidentity_v1, google } from 'googleapis'
 let cloudIdentityClient: cloudidentity_v1.Cloudidentity | null = null
 
 export class GoogleGroupRepository implements GroupRepository {
+  async clearCloudIdentityClient() {
+    cloudIdentityClient = null
+  }
+
   async getCloudIdentityClient() {
     if (cloudIdentityClient) {
       return cloudIdentityClient
