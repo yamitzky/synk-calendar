@@ -7,7 +7,11 @@
   "bin": {
     "synk-cal": "./bin/server.js"
   },
-  "files": ["bin", "public", "build"],
+  "files": [
+    "bin",
+    "public",
+    "build"
+  ],
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
@@ -50,6 +54,7 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.2",
     "@remix-run/dev": "^2.14.0",
+    "@remix-run/testing": "^2.15.3",
     "@storybook/addon-essentials": "^8.4.5",
     "@storybook/addon-interactions": "^8.4.5",
     "@storybook/addon-onboarding": "^8.4.5",

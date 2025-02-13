@@ -132,4 +132,54 @@ describe('getEvents', () => {
 
     consoleSpy.mockRestore()
   })
+
+  it('should filter events by attendeeEmail when provided', async () => {
+    const minDate = new Date('2025-02-13T00:00:00Z')
+    const maxDate = new Date('2025-02-14T00:00:00Z')
+
+    const events = await getEvents({
+      calendarRepository: mockCalendarRepository,
+      minDate,
+      maxDate,
+      attendeeEmail: 'user1@example.com',
+    })
+
+    expect(events).toHaveLength(1)
+    expect(events[0]?.people).toContainEqual(
+      expect.objectContaining({ email: 'user1@example.com' }),
+    )
+  })
+
+  it('should filter events by attendeeEmail after group expansion', async () => {
+    const minDate = new Date('2025-02-13T00:00:00Z')
+    const maxDate = new Date('2025-02-14T00:00:00Z')
+    const mockGroupRepository = createMockGroupRepository()
+
+    const events = await getEvents({
+      calendarRepository: mockCalendarRepository,
+      groupRepository: mockGroupRepository,
+      minDate,
+      maxDate,
+      attendeeEmail: 'member1@example.com',
+    })
+
+    expect(events).toHaveLength(1)
+    expect(events[0]?.people).toContainEqual(
+      expect.objectContaining({ email: 'member1@example.com' }),
+    )
+  })
+
+  it('should return empty array when attendeeEmail does not match any event', async () => {
+    const minDate = new Date('2025-02-13T00:00:00Z')
+    const maxDate = new Date('2025-02-14T00:00:00Z')
+
+    const events = await getEvents({
+      calendarRepository: mockCalendarRepository,
+      minDate,
+      maxDate,
+      attendeeEmail: 'nonexistent@example.com',
+    })
+
+    expect(events).toHaveLength(0)
+  })
 })
