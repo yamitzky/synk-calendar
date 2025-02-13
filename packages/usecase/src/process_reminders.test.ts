@@ -5,14 +5,16 @@ import { processReminders } from './process_reminders'
 
 vi.mock('@synk-cal/core', () => ({
   config: {
-    REMINDER_TEMPLATE: 'Custom reminder: <%= it.title %> in <%= it.minutesBefore %> minutes.',
-    REMINDER_MINUTES_BEFORE_OPTIONS: [5, 10, 15, 30, 60, 120, 180, 360, 720, 1440],
+    REMINDER_TEMPLATE: 'Custom reminder: <%= it.title %> <%= it.minutesBefore ? `in ${it.minutesBefore} minutes` : `tomorrow at ${String(it.hour).padStart(2, "0")}:${String(it.minute).padStart(2, "0")}` %>.',
   },
 }))
 
 vi.mock('eta', () => ({
   Eta: vi.fn().mockImplementation(() => ({
-    renderString: vi.fn((template, data) => `Custom reminder: ${data.title} in ${data.minutesBefore} minutes.`),
+    renderString: vi.fn((template, data) => 
+      `Custom reminder: ${data.title} ${
+        'minutesBefore' in data ? `in ${data.minutesBefore} minutes` : `tomorrow at ${String(data.hour).padStart(2, "0")}:${String(data.minute).padStart(2, "0")}`
+      }.`),
   })),
 }))
 
@@ -69,8 +71,12 @@ describe('processReminders', () => {
     ])
 
     const reminderSettingsMap: Record<string, ReminderSetting[]> = {
-      'user1@example.com': [{ minutesBefore: 10, notificationType: 'console' }],
-      'user2@example.com': [{ minutesBefore: 5, notificationType: 'webhook' }],
+      'user1@example.com': [
+        { minutesBefore: 10, notificationType: 'console' }
+      ],
+      'user2@example.com': [
+        { minutesBefore: 5, notificationType: 'webhook' }
+      ],
     }
 
     vi.mocked(mockReminderSettingsRepository.getReminderSettings).mockImplementation(async (userKey) => {
@@ -109,23 +115,23 @@ describe('processReminders', () => {
     expect(mockSendAllNotificationRepository.notify).not.toHaveBeenCalled()
   })
 
-  it('should not send notifications for invalid minutesBefore values', async () => {
-    const baseTime = parseISO('2023-06-01T10:00:00Z')
-    const eventStart = parseISO('2023-06-01T10:07:00Z')
+  it('should send notifications for day before at specific hour', async () => {
+    const baseTime = parseISO('2023-06-01T10:00:00Z') // 19:00 JST
+    const eventStart = parseISO('2023-06-02T10:00:00Z')
 
     vi.mocked(mockCalendarRepository.getEvents).mockResolvedValue([
       {
         id: '1',
         start: eventStart.toISOString(),
-        end: parseISO('2023-06-01T11:07:00Z').toISOString(),
+        end: parseISO('2023-06-02T11:00:00Z').toISOString(),
         title: 'Event 1',
         people: [{ email: 'user1@example.com', organizer: false }],
       },
     ])
 
     const reminderSettingsMap: Record<string, ReminderSetting[]> = {
-      'user1@example.com': [{ minutesBefore: 7, notificationType: 'console' }], // 7分は許可されていない値
-    }
+      'user1@example.com': [{ hour: 19, minute: 0, notificationType: 'console' }],
+    } 
 
     vi.mocked(mockReminderSettingsRepository.getReminderSettings).mockImplementation(async (userKey) => {
       return reminderSettingsMap[userKey] ?? []
@@ -140,7 +146,10 @@ describe('processReminders', () => {
       mockReminderSettingsRepository,
     )
 
-    expect(mockConsoleNotificationRepository.notify).not.toHaveBeenCalled()
+    expect(mockConsoleNotificationRepository.notify).toHaveBeenCalledWith(
+      'user1@example.com',
+      'Custom reminder: Event 1 tomorrow at 19:00.',
+    )
   })
 
   it('should handle multiple attendees for the same event', async () => {
@@ -161,8 +170,8 @@ describe('processReminders', () => {
     ])
 
     const reminderSettingsMap: Record<string, ReminderSetting[]> = {
-      'user1@example.com': [{ minutesBefore: 10, notificationType: 'console' }],
-      'user2@example.com': [{ minutesBefore: 10, notificationType: 'webhook' }],
+      'user1@example.com': [{ hour: 19, minute: 0, notificationType: 'console' }],
+      'user2@example.com': [{ hour: 19, minute: 0, notificationType: 'webhook' }],
     }
 
     vi.mocked(mockReminderSettingsRepository.getReminderSettings).mockImplementation(async (userKey) => {
@@ -181,12 +190,12 @@ describe('processReminders', () => {
 
     expect(mockConsoleNotificationRepository.notify).toHaveBeenCalledWith(
       'user1@example.com',
-      'Custom reminder: Event 1 in 10 minutes.',
+      'Custom reminder: Event 1 tomorrow at 19:00.',
     )
 
     expect(mockWebhookNotificationRepository.notify).toHaveBeenCalledWith(
       'user2@example.com',
-      'Custom reminder: Event 1 in 10 minutes.',
+      'Custom reminder: Event 1 tomorrow at 19:00.',
     )
   })
 
@@ -207,7 +216,7 @@ describe('processReminders', () => {
     const reminderSettingsMap: Record<string, ReminderSetting[]> = {
       'user1@example.com': [
         { minutesBefore: 10, notificationType: 'console' },
-        { minutesBefore: 10, notificationType: 'webhook' },
+        { hour: 19, minute: 0, notificationType: 'webhook' },
       ],
     }
 
@@ -232,7 +241,7 @@ describe('processReminders', () => {
 
     expect(mockWebhookNotificationRepository.notify).toHaveBeenCalledWith(
       'user1@example.com',
-      'Custom reminder: Event 1 in 10 minutes.',
+      'Custom reminder: Event 1 tomorrow at 19:00.',
     )
   })
 

@@ -78,7 +78,7 @@ export default function SettingsRoute() {
         <ReminderSettings
           user={user}
           reminders={currentReminders}
-          notifyBeforeOptions={notifyBeforeOptions}
+          minutesBeforeOptions={notifyBeforeOptions}
           onChange={handleRemindersChange}
         />
       )}
