@@ -2,10 +2,12 @@ import type { MetaFunction } from '@remix-run/node'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData, useNavigate } from '@remix-run/react'
 import { config } from '@synk-cal/core'
+import { getEvents } from '@synk-cal/usecase'
 import { addDays, format, parseISO, startOfWeek, subDays } from 'date-fns'
 import { Calendar } from '~/components/Calendar'
 import { getAuthRepository } from '~/services/getAuthRepository'
 import { getCalendarRepository } from '~/services/getCalendarRepository'
+import { getGroupRepository } from '~/services/getGroupRepository'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Synk Calendar' }, { name: 'description', content: 'Calendar viewer' }]
@@ -35,14 +37,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const minDate = subDays(startDate, 7)
   const maxDate = addDays(endDate, 7)
 
-  const repositories = config.CALENDAR_IDS.map((id) => ({
+  const calendarRepositories = config.CALENDAR_IDS.map((id) => ({
     id,
     repository: getCalendarRepository(id),
   }))
+  const groupRepository = getGroupRepository()
   const calendars = await Promise.all(
-    repositories.map(async ({ id, repository }) => ({
+    calendarRepositories.map(async ({ id, repository }) => ({
       calendarId: id,
-      events: await repository.getEvents(minDate, maxDate),
+      events: await getEvents({ calendarRepository: repository, groupRepository, minDate, maxDate }),
     })),
   )
   return json({

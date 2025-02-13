@@ -1,5 +1,6 @@
 export * from './calendar'
 export { config } from './config'
+export * from './group'
 export * from './notification'
 export * from './reminder'
 export * from './user'

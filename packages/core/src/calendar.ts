@@ -9,7 +9,7 @@ export type CalendarEvent = {
     name: string
     url: string
   }
-  people?: Array<{
+  people: Array<{
     email?: string
     displayName?: string
     responseStatus?: ResponseStatus

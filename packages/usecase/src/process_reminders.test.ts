@@ -1,21 +1,31 @@
-import type { CalendarRepository, NotificationRepository, ReminderSettingsRepository, ReminderSetting } from '@synk-cal/core'
+import type {
+  CalendarRepository,
+  NotificationRepository,
+  ReminderSetting,
+  ReminderSettingsRepository,
+} from '@synk-cal/core'
 import { parseISO } from 'date-fns'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { processReminders } from './process_reminders'
 
 vi.mock('@synk-cal/core', () => ({
   config: {
-    REMINDER_TEMPLATE: 'Custom reminder: <%= it.title %> <%= it.minutesBefore ? `in ${it.minutesBefore} minutes` : `tomorrow at ${String(it.hour).padStart(2, "0")}:${String(it.minute).padStart(2, "0")}` %>.',
+    REMINDER_TEMPLATE:
+      'Custom reminder: <%= it.title %> <%= it.minutesBefore ? `in ${it.minutesBefore} minutes` : `tomorrow at ${String(it.hour).padStart(2, "0")}:${String(it.minute).padStart(2, "0")}` %>.',
     TIMEZONE: 'UTC',
   },
 }))
 
 vi.mock('eta', () => ({
   Eta: vi.fn().mockImplementation(() => ({
-    renderString: vi.fn((template, data) => 
-      `Custom reminder: ${data.title} ${
-        'minutesBefore' in data ? `in ${data.minutesBefore} minutes` : `tomorrow at ${String(data.hour).padStart(2, "0")}:${String(data.minute).padStart(2, "0")}`
-      }.`),
+    renderString: vi.fn(
+      (template, data) =>
+        `Custom reminder: ${data.title} ${
+          'minutesBefore' in data
+            ? `in ${data.minutesBefore} minutes`
+            : `tomorrow at ${String(data.hour).padStart(2, '0')}:${String(data.minute).padStart(2, '0')}`
+        }.`,
+    ),
   })),
 }))
 
@@ -72,28 +82,25 @@ describe('processReminders', () => {
     ])
 
     const reminderSettingsMap: Record<string, ReminderSetting[]> = {
-      'user1@example.com': [
-        { minutesBefore: 10, notificationType: 'console' }
-      ],
-      'user2@example.com': [
-        { minutesBefore: 5, notificationType: 'webhook' }
-      ],
+      'user1@example.com': [{ minutesBefore: 10, notificationType: 'console' }],
+      'user2@example.com': [{ minutesBefore: 5, notificationType: 'webhook' }],
     }
 
     vi.mocked(mockReminderSettingsRepository.getReminderSettings).mockImplementation(async (userKey) => {
       return reminderSettingsMap[userKey] ?? []
     })
 
-    await processReminders(
+    await processReminders({
       baseTime,
-      [mockCalendarRepository],
-      {
+      calendarRepositories: [mockCalendarRepository],
+      groupRepository: undefined,
+      notificationRepositories: {
         console: mockConsoleNotificationRepository,
         webhook: mockWebhookNotificationRepository,
         sendall: mockSendAllNotificationRepository,
       },
-      mockReminderSettingsRepository,
-    )
+      reminderSettingsRepository: mockReminderSettingsRepository,
+    })
 
     expect(mockReminderSettingsRepository.getReminderSettings).toHaveBeenCalledWith('user1@example.com')
     expect(mockReminderSettingsRepository.getReminderSettings).toHaveBeenCalledWith('user2@example.com')
@@ -132,20 +139,21 @@ describe('processReminders', () => {
 
     const reminderSettingsMap: Record<string, ReminderSetting[]> = {
       'user1@example.com': [{ hour: 19, minute: 0, notificationType: 'console' }],
-    } 
+    }
 
     vi.mocked(mockReminderSettingsRepository.getReminderSettings).mockImplementation(async (userKey) => {
       return reminderSettingsMap[userKey] ?? []
     })
 
-    await processReminders(
+    await processReminders({
       baseTime,
-      [mockCalendarRepository],
-      {
+      calendarRepositories: [mockCalendarRepository],
+      groupRepository: undefined,
+      notificationRepositories: {
         console: mockConsoleNotificationRepository,
       },
-      mockReminderSettingsRepository,
-    )
+      reminderSettingsRepository: mockReminderSettingsRepository,
+    })
 
     expect(mockConsoleNotificationRepository.notify).toHaveBeenCalledWith(
       'user1@example.com',
@@ -179,15 +187,15 @@ describe('processReminders', () => {
       return reminderSettingsMap[userKey] ?? []
     })
 
-    await processReminders(
+    await processReminders({
       baseTime,
-      [mockCalendarRepository],
-      {
+      calendarRepositories: [mockCalendarRepository],
+      notificationRepositories: {
         console: mockConsoleNotificationRepository,
         webhook: mockWebhookNotificationRepository,
       },
-      mockReminderSettingsRepository,
-    )
+      reminderSettingsRepository: mockReminderSettingsRepository,
+    })
 
     expect(mockConsoleNotificationRepository.notify).toHaveBeenCalledWith(
       'user1@example.com',
@@ -233,15 +241,16 @@ describe('processReminders', () => {
       return reminderSettingsMap[userKey] ?? []
     })
 
-    await processReminders(
+    await processReminders({
       baseTime,
-      [mockCalendarRepository],
-      {
+      calendarRepositories: [mockCalendarRepository],
+      groupRepository: undefined,
+      notificationRepositories: {
         console: mockConsoleNotificationRepository,
         webhook: mockWebhookNotificationRepository,
       },
-      mockReminderSettingsRepository,
-    )
+      reminderSettingsRepository: mockReminderSettingsRepository,
+    })
 
     expect(mockConsoleNotificationRepository.notify).toHaveBeenCalledWith(
       'user1@example.com',
@@ -270,30 +279,32 @@ describe('processReminders', () => {
 
     vi.mocked(mockReminderSettingsRepository.getReminderSettings).mockResolvedValue([])
 
-    await processReminders(
+    await processReminders({
       baseTime,
-      [mockCalendarRepository],
-      {
+      calendarRepositories: [mockCalendarRepository],
+      groupRepository: undefined,
+      notificationRepositories: {
         console: mockConsoleNotificationRepository,
         webhook: mockWebhookNotificationRepository,
       },
-      mockReminderSettingsRepository,
-    )
+      reminderSettingsRepository: mockReminderSettingsRepository,
+    })
 
     expect(mockConsoleNotificationRepository.notify).not.toHaveBeenCalled()
     expect(mockWebhookNotificationRepository.notify).not.toHaveBeenCalled()
   })
 
   it('should not fetch events if no calendars are available', async () => {
-    await processReminders(
-      parseISO('2023-06-01T10:00:00Z'),
-      [],
-      {
+    await processReminders({
+      baseTime: parseISO('2023-06-01T10:00:00Z'),
+      calendarRepositories: [],
+      groupRepository: undefined,
+      notificationRepositories: {
         console: mockConsoleNotificationRepository,
         webhook: mockWebhookNotificationRepository,
       },
-      mockReminderSettingsRepository,
-    )
+      reminderSettingsRepository: mockReminderSettingsRepository,
+    })
 
     expect(mockCalendarRepository.getEvents).not.toHaveBeenCalled()
     expect(mockConsoleNotificationRepository.notify).not.toHaveBeenCalled()

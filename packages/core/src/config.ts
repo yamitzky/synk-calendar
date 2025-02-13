@@ -41,6 +41,8 @@ export const ConfigSchema = v.object({
   REMINDER_SETTINGS_FIRESTORE_DATABASE_ID: v.optional(v.string()),
   AUTH_PROVIDER: v.optional(v.union([v.literal('google-iap')])),
   WEBHOOK_URL: v.optional(v.pipe(v.string(), v.url())),
+  GROUP_PROVIDER: v.optional(v.union([v.literal('google')])),
+  GROUP_CUSTOMER_ID: v.optional(v.string()),
 })
 
 export type Config = v.InferOutput<typeof ConfigSchema>
@@ -56,6 +58,8 @@ export function parseConfig(env: NodeJS.ProcessEnv): Config {
     REMINDER_TEMPLATE: env.REMINDER_TEMPLATE,
     AUTH_PROVIDER: env.AUTH_PROVIDER,
     WEBHOOK_URL: env.WEBHOOK_URL,
+    GROUP_PROVIDER: env.GROUP_PROVIDER,
+    GROUP_CUSTOMER_ID: env.GROUP_CUSTOMER_ID,
   })
 }
 
