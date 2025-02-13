@@ -2,7 +2,7 @@
   "name": "@synk-cal/web",
   "sideEffects": false,
   "type": "module",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "main": "./build/server/index.js",
   "bin": {
     "synk-cal": "./bin/server.js"
