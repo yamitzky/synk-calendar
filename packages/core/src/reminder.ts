@@ -1,9 +1,17 @@
-export interface ReminderSetting {
+export type ReminderTiming =
+  | {
+      minutesBefore: number
+    }
+  | {
+      hour: number
+      minute: number
+    }
+
+export type ReminderSetting = {
   id?: string | number
-  minutesBefore: number
   notificationType: string
   target?: string
-}
+} & ReminderTiming
 
 export interface ReminderSettingsRepository {
   getReminderSettings: (userKey: string) => Promise<ReminderSetting[]>

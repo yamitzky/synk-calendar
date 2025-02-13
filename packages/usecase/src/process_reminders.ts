@@ -1,9 +1,34 @@
-import type { CalendarRepository, NotificationRepository, ReminderSettingsRepository } from '@synk-cal/core'
+import type {
+  CalendarRepository,
+  NotificationRepository,
+  ReminderSetting,
+  ReminderSettingsRepository,
+} from '@synk-cal/core'
 import { config } from '@synk-cal/core'
-import { addMinutes, isSameMinute, parseISO, subMinutes } from 'date-fns'
+import { addDays, isSameMinute, parseISO, subMinutes } from 'date-fns'
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
 import { Eta } from 'eta'
 
-const DEFAULT_TEMPLATE = 'Reminder: "<%= it.title %>" starts in <%= it.minutesBefore %> minutes.'
+const DEFAULT_TEMPLATE = `Reminder: "<%= it.title %>" starts <%= 
+  it.minutesBefore !== undefined 
+    ? \`in \${it.minutesBefore} minutes\` 
+    : \`tomorrow at \${String(it.hour).padStart(2, '0')}:\${String(it.minute).padStart(2, '0')}\` 
+%>.`
+
+const getReminderTime = (eventStart: Date, setting: ReminderSetting) => {
+  const timezone = config.TIMEZONE
+
+  if ('minutesBefore' in setting) {
+    return subMinutes(eventStart, setting.minutesBefore)
+  } else {
+    // Get the date of the day before the event
+    const reminderDateStr = formatInTimeZone(addDays(eventStart, -1), timezone, 'yyyy-MM-dd')
+    // Set the specified time
+    const reminderTimeStr = `${reminderDateStr}T${String(setting.hour).padStart(2, '0')}:${String(setting.minute).padStart(2, '0')}:00`
+    // Convert to UTC considering timezone
+    return fromZonedTime(reminderTimeStr, timezone)
+  }
+}
 
 export async function processReminders(
   baseTime: Date,
@@ -14,18 +39,15 @@ export async function processReminders(
   const eta = new Eta()
 
   // Get all events first
-  const maxMinutesBefore = Math.max(...config.REMINDER_MINUTES_BEFORE_OPTIONS)
   const events = (
     await Promise.all(
-      calendarRepositories.map((calendarRepository) =>
-        calendarRepository.getEvents(baseTime, addMinutes(baseTime, maxMinutesBefore)),
-      ),
+      calendarRepositories.map((calendarRepository) => calendarRepository.getEvents(baseTime, addDays(baseTime, 1))),
     )
   ).flat()
   console.debug('Fetched events', events.map((e) => `${e.title} (${e.start})`).join('\n'))
 
   const notifications: Array<{ repository: NotificationRepository; target: string; message: string }> = []
-  const reminderSettingsCache = new Map<string, Array<{ minutesBefore: number; notificationType: string }>>()
+  const reminderSettingsCache = new Map<string, ReminderSetting[]>()
 
   // Process each event
   for (const event of events) {
@@ -54,22 +76,17 @@ export async function processReminders(
 
       // Check each reminder setting for the attendee
       for (const setting of reminderSettings) {
-        // Skip if minutesBefore is not in the allowed options
-        if (!config.REMINDER_MINUTES_BEFORE_OPTIONS.includes(setting.minutesBefore)) {
-          console.debug(`Invalid minutesBefore value: ${setting.minutesBefore} for ${attendee.email}`)
-          continue
-        }
-
         const notificationRepository = notificationRepositories[setting.notificationType]
         if (!notificationRepository) {
           console.error(`No notification repository found for type: ${setting.notificationType}`)
           continue
         }
 
-        const reminderTime = subMinutes(parseISO(event.start), setting.minutesBefore)
-        if (!isSameMinute(reminderTime, baseTime)) {
+        const reminderTime = getReminderTime(parseISO(event.start), setting)
+        const isTimeMatch = isSameMinute(reminderTime, baseTime)
+        if (!isTimeMatch) {
           console.debug(
-            `Event "${event.title}" is not within ${setting.minutesBefore} minutes of ${baseTime} for ${attendee.email}`,
+            `Event "${event.title}" reminder time ${reminderTime} does not match current time ${baseTime} for ${attendee.email}`,
           )
           continue
         }
