@@ -1,6 +1,12 @@
-import { describe, it, expect, vi } from 'vitest'
+import {
+  type CalendarEvent,
+  type CalendarRepository,
+  type Group,
+  type GroupMember,
+  type GroupRepository,
+} from '@synk-cal/core'
+import { describe, expect, it, vi } from 'vitest'
 import { getEvents } from './get_events'
-import { type CalendarEvent, type CalendarRepository, type GroupRepository, type Group, type GroupMember } from '@synk-cal/core'
 
 describe('getEvents', () => {
   const mockEvent: CalendarEvent = {
@@ -10,28 +16,28 @@ describe('getEvents', () => {
     end: '2025-02-13T11:00:00Z',
     people: [
       { email: 'user1@example.com', responseStatus: 'accepted', organizer: true },
-      { email: 'group1@example.com', responseStatus: 'needsAction', organizer: false }
-    ]
+      { email: 'group1@example.com', responseStatus: 'needsAction', organizer: false },
+    ],
   }
 
   const mockGroup: Group = {
     id: 'group1',
     email: 'group1@example.com',
-    name: 'Test Group'
+    name: 'Test Group',
   }
 
   const mockGroupMembers: GroupMember[] = [
     { id: 'member1', email: 'member1@example.com', type: 'USER' },
-    { id: 'member2', email: 'member2@example.com', type: 'USER' }
+    { id: 'member2', email: 'member2@example.com', type: 'USER' },
   ]
 
   const createMockGroupRepository = (): GroupRepository => ({
     getGroups: vi.fn().mockResolvedValue([mockGroup]),
-    getGroupMembers: vi.fn().mockResolvedValue(mockGroupMembers)
+    getGroupMembers: vi.fn().mockResolvedValue(mockGroupMembers),
   })
 
   const mockCalendarRepository: CalendarRepository = {
-    getEvents: vi.fn().mockResolvedValue([mockEvent])
+    getEvents: vi.fn().mockResolvedValue([mockEvent]),
   }
 
   it('should fetch events without group expansion when no groupRepository is provided', async () => {
@@ -41,7 +47,7 @@ describe('getEvents', () => {
     const events = await getEvents({
       calendarRepository: mockCalendarRepository,
       minDate,
-      maxDate
+      maxDate,
     })
 
     expect(mockCalendarRepository.getEvents).toHaveBeenCalledWith(minDate, maxDate)
@@ -58,18 +64,18 @@ describe('getEvents', () => {
       calendarRepository: mockCalendarRepository,
       groupRepository: mockGroupRepository,
       minDate,
-      maxDate
+      maxDate,
     })
 
     expect(mockGroupRepository.getGroups).toHaveBeenCalled()
     expect(mockGroupRepository.getGroupMembers).toHaveBeenCalledWith(mockGroup.id)
     expect(events[0]?.people).toEqual([
       mockEvent.people[0],
-      ...mockGroupMembers.map(member => ({
+      ...mockGroupMembers.map((member) => ({
         email: member.email,
         responseStatus: 'needsAction',
-        organizer: false
-      }))
+        organizer: false,
+      })),
     ])
   })
 
@@ -79,11 +85,11 @@ describe('getEvents', () => {
 
     const mockEventWithSameGroup: CalendarEvent = {
       ...mockEvent,
-      id: 'event2'
+      id: 'event2',
     }
 
     const mockCalendarRepositoryWithMultipleEvents: CalendarRepository = {
-      getEvents: vi.fn().mockResolvedValue([mockEvent, mockEventWithSameGroup])
+      getEvents: vi.fn().mockResolvedValue([mockEvent, mockEventWithSameGroup]),
     }
 
     // Create a fresh mock repository for this test
@@ -93,7 +99,7 @@ describe('getEvents', () => {
       calendarRepository: mockCalendarRepositoryWithMultipleEvents,
       groupRepository: mockGroupRepository,
       minDate,
-      maxDate
+      maxDate,
     })
 
     // getGroupMembers should only be called once despite having two events with the same group
@@ -106,7 +112,7 @@ describe('getEvents', () => {
 
     const mockGroupRepositoryWithError: GroupRepository = {
       getGroups: vi.fn().mockResolvedValue([mockGroup]),
-      getGroupMembers: vi.fn().mockRejectedValue(new Error('Failed to fetch group members'))
+      getGroupMembers: vi.fn().mockRejectedValue(new Error('Failed to fetch group members')),
     }
 
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation((message) => {
@@ -117,7 +123,7 @@ describe('getEvents', () => {
       calendarRepository: mockCalendarRepository,
       groupRepository: mockGroupRepositoryWithError,
       minDate,
-      maxDate
+      maxDate,
     })
 
     expect(consoleSpy).toHaveBeenCalled()
@@ -125,5 +131,55 @@ describe('getEvents', () => {
     expect(events[0]?.people).toEqual(mockEvent.people)
 
     consoleSpy.mockRestore()
+  })
+
+  it('should filter events by attendeeEmail when provided', async () => {
+    const minDate = new Date('2025-02-13T00:00:00Z')
+    const maxDate = new Date('2025-02-14T00:00:00Z')
+
+    const events = await getEvents({
+      calendarRepository: mockCalendarRepository,
+      minDate,
+      maxDate,
+      attendeeEmail: 'user1@example.com',
+    })
+
+    expect(events).toHaveLength(1)
+    expect(events[0]?.people).toContainEqual(
+      expect.objectContaining({ email: 'user1@example.com' }),
+    )
+  })
+
+  it('should filter events by attendeeEmail after group expansion', async () => {
+    const minDate = new Date('2025-02-13T00:00:00Z')
+    const maxDate = new Date('2025-02-14T00:00:00Z')
+    const mockGroupRepository = createMockGroupRepository()
+
+    const events = await getEvents({
+      calendarRepository: mockCalendarRepository,
+      groupRepository: mockGroupRepository,
+      minDate,
+      maxDate,
+      attendeeEmail: 'member1@example.com',
+    })
+
+    expect(events).toHaveLength(1)
+    expect(events[0]?.people).toContainEqual(
+      expect.objectContaining({ email: 'member1@example.com' }),
+    )
+  })
+
+  it('should return empty array when attendeeEmail does not match any event', async () => {
+    const minDate = new Date('2025-02-13T00:00:00Z')
+    const maxDate = new Date('2025-02-14T00:00:00Z')
+
+    const events = await getEvents({
+      calendarRepository: mockCalendarRepository,
+      minDate,
+      maxDate,
+      attendeeEmail: 'nonexistent@example.com',
+    })
+
+    expect(events).toHaveLength(0)
   })
 })

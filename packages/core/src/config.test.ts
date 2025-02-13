@@ -8,6 +8,7 @@ describe('Config', () => {
       NODE_ENV: 'test',
       GOOGLE_AUTH_SUBJECT: 'test@example.com',
       CALENDAR_IDS: 'calendar1,calendar2',
+      PRIVATE_CALENDAR_IDS: 'calendar3,calendar4',
       REMINDER_SETTINGS: JSON.stringify([
         { minutesBefore: 10, notificationType: 'email' },
         { hour: 9, minute: 0, notificationType: 'sms', target: '+1234567890' },
@@ -25,6 +26,7 @@ describe('Config', () => {
     expect(parsedConfig).toEqual({
       GOOGLE_AUTH_SUBJECT: 'test@example.com',
       CALENDAR_IDS: ['calendar1', 'calendar2'],
+      PRIVATE_CALENDAR_IDS: ['calendar3', 'calendar4'],
       TIMEZONE: 'UTC',
       REMINDER_SETTINGS: [
         { minutesBefore: 10, notificationType: 'email' },
@@ -50,6 +52,7 @@ describe('Config', () => {
     expect(parsedConfig).toEqual({
       GOOGLE_AUTH_SUBJECT: undefined,
       CALENDAR_IDS: ['calendar1'],
+      PRIVATE_CALENDAR_IDS: [],
       TIMEZONE: 'UTC',
       REMINDER_SETTINGS: [],
       REMINDER_TEMPLATE: undefined,

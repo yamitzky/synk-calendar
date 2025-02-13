@@ -37,16 +37,46 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const minDate = subDays(startDate, 7)
   const maxDate = addDays(endDate, 7)
 
-  const calendarRepositories = config.CALENDAR_IDS.map((id) => ({
-    id,
-    repository: getCalendarRepository(id),
-  }))
+  const calendarRepositories = [
+    ...config.CALENDAR_IDS.map((id) => ({
+      id,
+      isPrivate: false,
+      repository: getCalendarRepository(id),
+    })),
+    ...config.PRIVATE_CALENDAR_IDS.map((id) => ({
+      id,
+      isPrivate: true,
+      repository: getCalendarRepository(id),
+    })),
+  ]
   const groupRepository = getGroupRepository()
   const calendars = await Promise.all(
-    calendarRepositories.map(async ({ id, repository }) => ({
-      calendarId: id,
-      events: await getEvents({ calendarRepository: repository, groupRepository, minDate, maxDate }),
-    })),
+    calendarRepositories.map(async ({ id, isPrivate, repository }) => {
+      if (!isPrivate) {
+        const events = await getEvents({ calendarRepository: repository, groupRepository, minDate, maxDate })
+        return {
+          calendarId: id,
+          events,
+        }
+      } else if (user?.email) {
+        const events = await getEvents({
+          calendarRepository: repository,
+          groupRepository,
+          minDate,
+          maxDate,
+          attendeeEmail: user.email,
+        })
+        return {
+          calendarId: id,
+          events,
+        }
+      } else {
+        return {
+          calendarId: id,
+          events: [],
+        }
+      }
+    }),
   )
   return json({
     calendars,
