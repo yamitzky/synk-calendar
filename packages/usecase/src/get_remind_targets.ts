@@ -1,33 +1,45 @@
-import type {
-  CalendarRepository,
-  GroupRepository,
-  ReminderSetting,
-  ReminderSettingsRepository,
-} from '@synk-cal/core'
+import type { CalendarRepository, GroupRepository, ReminderSetting, ReminderSettingsRepository } from '@synk-cal/core'
 import { config } from '@synk-cal/core'
-import { addDays, parseISO, subMinutes } from 'date-fns'
-import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
+import { parseISO, subDays, subMinutes } from 'date-fns'
 import { Eta } from 'eta'
 import { getEvents } from './get_events'
 
 export const DEFAULT_TEMPLATE = `Reminder: "<%= it.title %>" starts <%= 
   it.minutesBefore !== undefined 
     ? \`in \${it.minutesBefore} minutes\` 
-    : \`tomorrow at \${String(it.hour).padStart(2, '0')}:\${String(it.minute).padStart(2, '0')}\` 
+    : \`tomorrow at \${new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: it.timezone }).format(new Date(it.start))}\` 
 %>.`
 
 export const getReminderTime = (eventStart: Date, setting: ReminderSetting) => {
-  const timezone = config.TIMEZONE
-
   if ('minutesBefore' in setting) {
     return subMinutes(eventStart, setting.minutesBefore)
   } else {
-    // Get the date of the day before the event
-    const reminderDateStr = formatInTimeZone(addDays(eventStart, -1), timezone, 'yyyy-MM-dd')
-    // Set the specified time
-    const reminderTimeStr = `${reminderDateStr}T${String(setting.hour).padStart(2, '0')}:${String(setting.minute).padStart(2, '0')}:00`
-    // Convert to UTC considering timezone
-    return fromZonedTime(reminderTimeStr, timezone)
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: config.TIMEZONE,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    })
+
+    const parts = formatter.formatToParts(eventStart)
+    // @ts-expect-error
+    const dateValues: Record<Intl.DateTimeFormatPartTypes, number> = {}
+    parts.forEach((part) => {
+      if (part.type !== 'literal') {
+        dateValues[part.type] = parseInt(part.value, 10)
+      }
+    })
+
+    let localDate = new Date(
+      Date.UTC(dateValues.year, dateValues.month - 1, dateValues.day, setting.hour, setting.minute, dateValues.second),
+    )
+    localDate = subDays(localDate, 1)
+    const offset = -new Date(new Date().toLocaleString('en-US', { timeZone: config.TIMEZONE })).getTimezoneOffset()
+    return new Date(localDate.getTime() - offset * 60 * 1000)
   }
 }
 
@@ -44,11 +56,12 @@ type GetRemindTargetsParams = {
   calendarRepositories: CalendarRepository[]
   groupRepository?: GroupRepository
   reminderSettingsRepository: ReminderSettingsRepository
+  userEmail?: string // Optional: If provided, only return reminders for this user
 }
 
 /**
  * Get a list of reminder targets based on calendar events and reminder settings
- * Returns all potential reminder targets within the specified date range
+ * If userEmail is provided, only returns reminders for that specific user
  */
 export async function getRemindTargets({
   startDate,
@@ -56,6 +69,7 @@ export async function getRemindTargets({
   calendarRepositories,
   groupRepository,
   reminderSettingsRepository,
+  userEmail,
 }: GetRemindTargetsParams): Promise<ReminderTarget[]> {
   const eta = new Eta()
   const targets: ReminderTarget[] = []
@@ -78,8 +92,11 @@ export async function getRemindTargets({
       continue
     }
 
+    // If userEmail is provided, only process that user's reminders
+    const targetAttendees = userEmail ? attendees.filter((person) => person.email === userEmail) : attendees
+
     // Get reminder settings for each attendee
-    for (const attendee of attendees) {
+    for (const attendee of targetAttendees) {
       if (!attendee.email) {
         continue
       }
@@ -99,8 +116,12 @@ export async function getRemindTargets({
       // Check each reminder setting for the attendee
       for (const setting of reminderSettings) {
         const reminderTime = getReminderTime(parseISO(event.start), setting)
-        const message = eta.renderString(config.REMINDER_TEMPLATE ?? DEFAULT_TEMPLATE, { ...setting, ...event })
-        
+        const message = eta.renderString(config.REMINDER_TEMPLATE ?? DEFAULT_TEMPLATE, {
+          ...setting,
+          ...event,
+          timezone: config.TIMEZONE,
+        })
+
         targets.push({
           sendAt: reminderTime,
           notificationType: setting.notificationType,

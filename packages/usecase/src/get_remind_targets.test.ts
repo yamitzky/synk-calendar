@@ -6,22 +6,9 @@ import { getRemindTargets } from './get_remind_targets'
 vi.mock('@synk-cal/core', () => ({
   config: {
     REMINDER_TEMPLATE:
-      'Custom reminder: <%= it.title %> <%= it.minutesBefore ? `in ${it.minutesBefore} minutes` : `tomorrow at ${String(it.hour).padStart(2, "0")}:${String(it.minute).padStart(2, "0")}` %>.',
+      'Custom reminder: <%= it.title %> <%= it.minutesBefore ? `in ${it.minutesBefore} minutes` : `tomorrow at ${it.start.split("T")[1].substring(0, 5)}` %>.',
     TIMEZONE: 'UTC',
   },
-}))
-
-vi.mock('eta', () => ({
-  Eta: vi.fn().mockImplementation(() => ({
-    renderString: vi.fn(
-      (template, data) =>
-        `Custom reminder: ${data.title} ${
-          'minutesBefore' in data
-            ? `in ${data.minutesBefore} minutes`
-            : `tomorrow at ${String(data.hour).padStart(2, '0')}:${String(data.minute).padStart(2, '0')}`
-        }.`,
-    ),
-  })),
 }))
 
 describe('getRemindTargets', () => {
@@ -39,7 +26,7 @@ describe('getRemindTargets', () => {
     }
   })
 
-  it('should return reminder targets with correct send times for minutes-based reminders', async () => {
+  it('should return reminder targets for events with matching reminder times', async () => {
     const startDate = parseISO('2023-06-01T10:00:00Z')
     const endDate = parseISO('2023-06-02T10:00:00Z')
     const event1Start = parseISO('2023-06-01T10:10:00Z')
@@ -95,7 +82,58 @@ describe('getRemindTargets', () => {
     ])
   })
 
-  it('should return reminder targets with correct send times for day-before reminders', async () => {
+  it('should return reminder targets only for specified user when userEmail is provided', async () => {
+    const startDate = parseISO('2023-06-01T10:00:00Z')
+    const endDate = parseISO('2023-06-02T10:00:00Z')
+    const event1Start = parseISO('2023-06-01T10:10:00Z')
+    const event2Start = parseISO('2023-06-01T10:05:00Z')
+
+    vi.mocked(mockCalendarRepository.getEvents).mockResolvedValue([
+      {
+        id: '1',
+        start: event1Start.toISOString(),
+        end: parseISO('2023-06-01T11:10:00Z').toISOString(),
+        title: 'Event 1',
+        people: [{ email: 'user1@example.com', organizer: false }],
+      },
+      {
+        id: '2',
+        start: event2Start.toISOString(),
+        end: parseISO('2023-06-01T11:05:00Z').toISOString(),
+        title: 'Event 2',
+        people: [{ email: 'user2@example.com', organizer: false }],
+      },
+    ])
+
+    const reminderSettingsMap: Record<string, ReminderSetting[]> = {
+      'user1@example.com': [{ minutesBefore: 10, notificationType: 'console' }],
+      'user2@example.com': [{ minutesBefore: 5, notificationType: 'webhook' }],
+    }
+
+    vi.mocked(mockReminderSettingsRepository.getReminderSettings).mockImplementation(async (userKey) => {
+      return reminderSettingsMap[userKey] ?? []
+    })
+
+    const targets = await getRemindTargets({
+      startDate,
+      endDate,
+      calendarRepositories: [mockCalendarRepository],
+      groupRepository: undefined,
+      reminderSettingsRepository: mockReminderSettingsRepository,
+      userEmail: 'user1@example.com',
+    })
+
+    expect(targets).toEqual([
+      {
+        sendAt: parseISO('2023-06-01T10:00:00Z'),
+        notificationType: 'console',
+        target: 'user1@example.com',
+        message: 'Custom reminder: Event 1 in 10 minutes.',
+      },
+    ])
+  })
+
+  it('should return reminder targets for day before at specific hour', async () => {
     const startDate = parseISO('2023-06-01T10:00:00Z')
     const endDate = parseISO('2023-06-02T10:00:00Z')
     const eventStart = parseISO('2023-06-02T01:00:00Z') // UTC 01:00 = 10:00 JST
@@ -128,10 +166,10 @@ describe('getRemindTargets', () => {
 
     expect(targets).toEqual([
       {
-        sendAt: parseISO('2023-06-01T19:00:00Z'),
+        sendAt: parseISO('2023-06-01T10:00:00Z'),
         notificationType: 'console',
         target: 'user1@example.com',
-        message: 'Custom reminder: Event 1 tomorrow at 19:00.',
+        message: 'Custom reminder: Event 1 tomorrow at 01:00.',
       },
     ])
   })
@@ -173,23 +211,23 @@ describe('getRemindTargets', () => {
 
     expect(targets).toEqual([
       {
-        sendAt: parseISO('2023-06-01T19:00:00Z'),
+        sendAt: parseISO('2023-06-01T10:00:00Z'),
         notificationType: 'console',
         target: 'user1@example.com',
-        message: 'Custom reminder: Event 1 tomorrow at 19:00.',
+        message: 'Custom reminder: Event 1 tomorrow at 01:00.',
       },
       {
-        sendAt: parseISO('2023-06-01T19:00:00Z'),
+        sendAt: parseISO('2023-06-01T10:00:00Z'),
         notificationType: 'webhook',
         target: 'user2@example.com',
-        message: 'Custom reminder: Event 1 tomorrow at 19:00.',
+        message: 'Custom reminder: Event 1 tomorrow at 01:00.',
       },
     ])
   })
 
   it('should return empty array for users without reminder settings', async () => {
     const startDate = parseISO('2023-06-01T10:00:00Z')
-    const endDate = parseISO('2023-06-02T10:00:00Z')
+    const endDate = parseISO('2023-06-01T11:00:00Z')
     const eventStart = parseISO('2023-06-01T10:10:00Z')
 
     vi.mocked(mockCalendarRepository.getEvents).mockResolvedValue([
