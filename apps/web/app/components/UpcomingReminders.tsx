@@ -37,6 +37,7 @@ export function UpcomingReminders({ reminders, className }: Props) {
             sortedReminders.map((reminder, index) => (
               <div key={index} className="flex flex-col gap-1 p-4 border rounded">
                 <div className="text-sm text-default-500">
+                  {reminder.sendAt}
                   {locale === 'ja'
                     ? `${dateTimeFormatter.format(parseISO(reminder.sendAt))}に通知`
                     : `Notify at ${dateTimeFormatter.format(parseISO(reminder.sendAt))}`}

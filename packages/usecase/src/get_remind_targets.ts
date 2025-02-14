@@ -1,6 +1,7 @@
 import type { CalendarRepository, GroupRepository, ReminderSetting, ReminderSettingsRepository } from '@synk-cal/core'
 import { config } from '@synk-cal/core'
-import { parseISO, subDays, subMinutes } from 'date-fns'
+import { parseISO, setHours, setMinutes, subDays, subMinutes } from 'date-fns'
+import { fromZonedTime, toZonedTime } from 'date-fns-tz'
 import { Eta } from 'eta'
 import { getEvents } from './get_events'
 
@@ -14,32 +15,10 @@ export const getReminderTime = (eventStart: Date, setting: ReminderSetting) => {
   if ('minutesBefore' in setting) {
     return subMinutes(eventStart, setting.minutesBefore)
   } else {
-    const formatter = new Intl.DateTimeFormat('en-US', {
-      timeZone: config.TIMEZONE,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    })
-
-    const parts = formatter.formatToParts(eventStart)
-    // @ts-expect-error
-    const dateValues: Record<Intl.DateTimeFormatPartTypes, number> = {}
-    parts.forEach((part) => {
-      if (part.type !== 'literal') {
-        dateValues[part.type] = parseInt(part.value, 10)
-      }
-    })
-
-    let localDate = new Date(
-      Date.UTC(dateValues.year, dateValues.month - 1, dateValues.day, setting.hour, setting.minute, dateValues.second),
-    )
-    localDate = subDays(localDate, 1)
-    const offset = -new Date(new Date().toLocaleString('en-US', { timeZone: config.TIMEZONE })).getTimezoneOffset()
-    return new Date(localDate.getTime() - offset * 60 * 1000)
+    const zonedDate = toZonedTime(eventStart, config.TIMEZONE)
+    const previousDay = subDays(zonedDate, 1)
+    const previousDayAt = setMinutes(setHours(previousDay, setting.hour), setting.minute)
+    return fromZonedTime(previousDayAt, config.TIMEZONE)
   }
 }
 

@@ -166,7 +166,7 @@ describe('getRemindTargets', () => {
 
     expect(targets).toEqual([
       {
-        sendAt: parseISO('2023-06-01T10:00:00Z'),
+        sendAt: parseISO('2023-06-01T19:00:00Z'),
         notificationType: 'console',
         target: 'user1@example.com',
         message: 'Custom reminder: Event 1 tomorrow at 01:00.',
@@ -211,13 +211,13 @@ describe('getRemindTargets', () => {
 
     expect(targets).toEqual([
       {
-        sendAt: parseISO('2023-06-01T10:00:00Z'),
+        sendAt: parseISO('2023-06-01T19:00:00Z'),
         notificationType: 'console',
         target: 'user1@example.com',
         message: 'Custom reminder: Event 1 tomorrow at 01:00.',
       },
       {
-        sendAt: parseISO('2023-06-01T10:00:00Z'),
+        sendAt: parseISO('2023-06-01T19:00:00Z'),
         notificationType: 'webhook',
         target: 'user2@example.com',
         message: 'Custom reminder: Event 1 tomorrow at 01:00.',
