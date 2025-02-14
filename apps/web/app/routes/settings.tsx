@@ -1,8 +1,13 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useFetcher, useLoaderData } from '@remix-run/react'
-import { ReminderSetting } from '@synk-cal/core'
+import { ReminderSetting, config } from '@synk-cal/core'
+import { ReminderTarget, getRemindTargets } from '@synk-cal/usecase'
+import { addDays } from 'date-fns'
 import { ReminderSettings } from '~/components/Settings'
+import { UpcomingReminders } from '~/components/UpcomingReminders'
 import { getAuthRepository } from '~/services/getAuthRepository'
+import { getCalendarRepository } from '~/services/getCalendarRepository'
+import { getGroupRepository } from '~/services/getGroupRepository'
 import { getReminderSettingsRepository } from '~/services/getReminderSettingsRepository'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -11,14 +16,32 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const reminderSettingsRepo = getReminderSettingsRepository()
 
   let reminders: ReminderSetting[] = []
+  let upcomingReminders: ReminderTarget[] = []
   if (user) {
     reminders = (await reminderSettingsRepo.getReminderSettings(user.email)) || []
+
+    // Get upcoming reminders for the next 48 hours
+    const now = new Date()
+    const calendarRepositories = [
+      ...config.CALENDAR_IDS.map((id) => getCalendarRepository(id)),
+      ...config.PRIVATE_CALENDAR_IDS.map((id) => getCalendarRepository(id)),
+    ]
+
+    upcomingReminders = await getRemindTargets({
+      startDate: now,
+      endDate: addDays(now, 7),
+      calendarRepositories,
+      groupRepository: getGroupRepository(),
+      reminderSettingsRepository: reminderSettingsRepo,
+      userEmail: user.email, // Only get reminders for the current user
+    })
   }
 
   return json({
     user,
     isReminderSettingsEnabled: !!reminderSettingsRepo,
     reminders,
+    upcomingReminders,
   })
 }
 
@@ -52,7 +75,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function SettingsRoute() {
-  const { user, reminders, isReminderSettingsEnabled } = useLoaderData<typeof loader>()
+  const { user, reminders, upcomingReminders, isReminderSettingsEnabled } = useLoaderData<typeof loader>()
   const fetcher = useFetcher()
 
   const handleRemindersChange = (newReminders: ReminderSetting[]) => {
@@ -72,8 +95,10 @@ export default function SettingsRoute() {
       ) : !isReminderSettingsEnabled ? (
         <div>Reminder settings are not enabled.</div>
       ) : (
-        // FIXME: reminder options config
-        <ReminderSettings user={user} reminders={currentReminders} onChange={handleRemindersChange} />
+        <div className="flex flex-col gap-4">
+          <ReminderSettings user={user} reminders={currentReminders} onChange={handleRemindersChange} />
+          <UpcomingReminders reminders={upcomingReminders} />
+        </div>
       )}
     </div>
   )
