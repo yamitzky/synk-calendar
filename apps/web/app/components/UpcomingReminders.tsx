@@ -1,6 +1,7 @@
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import { ReminderTarget } from '@synk-cal/usecase'
 import { parseISO } from 'date-fns'
+import { useState } from 'react'
 import useLocale from '~/hooks/useLocale'
 
 type SerializedReminderTarget = Omit<ReminderTarget, 'sendAt'> & {
@@ -24,6 +25,8 @@ export function UpcomingReminders({ reminders, className }: Props) {
     hour12: false,
   })
 
+  const [isISOFormat, setIsISOFormat] = useState(false)
+
   return (
     <Card className={className}>
       <CardHeader>
@@ -34,21 +37,21 @@ export function UpcomingReminders({ reminders, className }: Props) {
           {sortedReminders.length === 0 ? (
             <p className="text-default-500">{locale === 'ja' ? 'リマインダーはありません' : 'No upcoming reminders'}</p>
           ) : (
-            sortedReminders.map((reminder, index) => (
-              <div key={index} className="flex flex-col gap-1 p-4 border rounded">
-                <div className="text-sm text-default-500">
-                  {reminder.sendAt}
-                  {locale === 'ja'
-                    ? `${dateTimeFormatter.format(parseISO(reminder.sendAt))}に通知`
-                    : `Notify at ${dateTimeFormatter.format(parseISO(reminder.sendAt))}`}
+            sortedReminders.map((reminder, index) => {
+              const sendAt = isISOFormat ? reminder.sendAt : dateTimeFormatter.format(parseISO(reminder.sendAt))
+              return (
+                <div key={index} className="flex flex-col gap-1 p-4 border rounded">
+                  <div className="text-sm text-default-500" onClick={() => setIsISOFormat((bool) => !bool)}>
+                    {locale === 'ja' ? `${sendAt}に通知` : `Notify at ${sendAt}`}
+                  </div>
+                  <div className="text-default-700">{reminder.message}</div>
+                  <div className="text-xs text-default-400">
+                    {locale === 'ja' ? '通知方法：' : 'Notification type: '}
+                    {reminder.notificationType}
+                  </div>
                 </div>
-                <div className="text-default-700">{reminder.message}</div>
-                <div className="text-xs text-default-400">
-                  {locale === 'ja' ? '通知方法：' : 'Notification type: '}
-                  {reminder.notificationType}
-                </div>
-              </div>
-            ))
+              )
+            })
           )}
         </div>
       </CardBody>
